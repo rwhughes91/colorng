@@ -7,6 +7,23 @@
     "noEmit": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "strict": true
-  }
+    "strict": true,
+    "noImplicitAny": true,
+    "forceConsistentCasingInFileNames": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": ["./src/components/*"],
+      "@screens/*": ["./src/screens/*"],
+      "@styles/*": ["./src/styles/*"],
+      "@context/*": ["./src/context/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@services/*": ["./src/services/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@constants/*": ["./src/constants/*"],
+      "@store/*": ["./src/store/*"]
+    }
+  },
+  "exclude": ["node_modules"]
 }
