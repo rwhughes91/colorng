@@ -13,5 +13,5 @@ web-build/
 .DS_Store
 
 
-# Firebase
-firebaseConfig.ts
+# Env
+environment.ts
