@@ -1,7 +1,7 @@
 import Firebase from '@services/firebase/client';
 import React, { useState } from 'react';
 
-export const FirebaseContext = React.createContext(Firebase);
+export const FirebaseContext = React.createContext<Firebase | null>(null);
 
 const FirebaseProvider: React.FC = (props) => {
   const [firebase] = useState(Firebase.init());

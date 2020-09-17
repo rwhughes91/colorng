@@ -2,6 +2,7 @@ import FirebaseProvider from '@context/FirebaseProvider';
 import Navigation from '@navigations/AppNavigator';
 import { registerRootComponent, AppLoading } from 'expo';
 import * as Font from 'expo-font';
+import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 
 const App: React.FC = () => {
@@ -13,6 +14,7 @@ const App: React.FC = () => {
 
   return (
     <FirebaseProvider>
+      <StatusBar style="dark" />
       <Navigation />
     </FirebaseProvider>
   );
