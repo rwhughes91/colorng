@@ -2,16 +2,28 @@ import CreateIcon from '@components/icons/CreateIcon';
 import ExploreIcon from '@components/icons/ExploreIcon';
 import HeartIcon from '@components/icons/HeartIcon';
 import ProfileIcon from '@components/icons/ProfileIcon';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
-import CreateScreen from '@screens/CreateScreen';
-import HomeScreen from '@screens/HomeScreen';
+import { createBottomTabNavigator, BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { NavigationContainer, RouteProp } from '@react-navigation/native';
 import ProfileScreen from '@screens/ProfileScreen';
 import SavedScreen from '@screens/SavedScreen';
 import { Colors } from '@styles/index';
 import React from 'react';
 
-const Tab = createBottomTabNavigator();
+import CreateNavigator from './CreateNavigator';
+import GradientNavigator from './GradientNavigator';
+
+type Params = 'Home' | 'Saved' | 'Create' | 'Profile';
+
+type AppTabParamList = {
+  [param in Params]: undefined;
+};
+
+export interface NavigationScreenProps<T extends keyof AppTabParamList> {
+  navigation: BottomTabNavigationProp<AppTabParamList, T>;
+  route: RouteProp<AppTabParamList, T>;
+}
+
+const Tab = createBottomTabNavigator<AppTabParamList>();
 
 const Navigation = () => {
   return (
@@ -24,8 +36,8 @@ const Navigation = () => {
         }}
       >
         <Tab.Screen
-          name="home"
-          component={HomeScreen}
+          name="Home"
+          component={GradientNavigator}
           options={{
             tabBarIcon: ({ focused, size, color }) => (
               <ExploreIcon focused={focused} size={size} color={color} />
@@ -33,7 +45,7 @@ const Navigation = () => {
           }}
         />
         <Tab.Screen
-          name="saved"
+          name="Saved"
           component={SavedScreen}
           options={{
             tabBarIcon: ({ focused, size, color }) => (
@@ -42,8 +54,8 @@ const Navigation = () => {
           }}
         />
         <Tab.Screen
-          name="create"
-          component={CreateScreen}
+          name="Create"
+          component={CreateNavigator}
           options={{
             tabBarIcon: ({ focused, size, color }) => (
               <CreateIcon focused={focused} size={size} color={color} />
@@ -51,7 +63,7 @@ const Navigation = () => {
           }}
         />
         <Tab.Screen
-          name="settings"
+          name="Profile"
           component={ProfileScreen}
           options={{
             tabBarIcon: ({ focused, size, color }) => (
