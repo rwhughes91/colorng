@@ -1,11 +1,20 @@
 import { Dimensions, PixelRatio } from 'react-native';
 
 const WINDOW_WIDTH = Dimensions.get('window').width;
+const WINDOW_HEIGHT = Dimensions.get('window').height;
 const guidelineBaseWidth = 375;
+const heightGuideLineBaseHeight = 680;
 
 type Style = number | string;
 
 export const scaleSize = (size: number) => (WINDOW_WIDTH / guidelineBaseWidth) * size;
+export const scaleHeightInverse = (size: number) =>
+  (heightGuideLineBaseHeight / WINDOW_HEIGHT) * size;
+
+export const adjustHeader = (size: number) => {
+  const baseHeight = 900;
+  return (baseHeight / WINDOW_HEIGHT) * 2 * size;
+};
 
 export const scaleFont = (size: number) => size * PixelRatio.getFontScale();
 

@@ -5,10 +5,9 @@ import GradientDetailScreen from '@screens/gradient/GradientDetailScreen';
 import GradientListScreen from '@screens/gradient/GradientListScreen';
 import GradientSearchScreen from '@screens/gradient/GradientSearchScreen';
 import HomeScreen from '@screens/gradient/HomeScreen';
-import { Colors, Spacing } from '@styles/index';
+import { Spacing, Colors } from '@styles/index';
 import React from 'react';
 import { Platform } from 'react-native';
-
 type Params = 'Home' | 'List' | 'Search' | 'Detail';
 
 type GradientStackParamList = {
@@ -28,15 +27,27 @@ const GradientNavigator = () => {
       screenOptions={{
         headerTransparent: true,
         headerTitle: '',
-        headerBackImage: () => <BackIcon size={30} color={Colors.PINK} />,
+        headerBackImage: ({ tintColor }) => <BackIcon size={30} color={tintColor} />,
         headerBackTitleVisible: false,
         headerLeftContainerStyle: { paddingLeft: Platform.OS === 'ios' ? Spacing.SCALE_12 : 0 },
       }}
     >
       <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="List" component={GradientListScreen} />
-      <Stack.Screen name="Search" component={GradientSearchScreen} />
-      <Stack.Screen name="Detail" component={GradientDetailScreen} />
+      <Stack.Screen
+        name="List"
+        component={GradientListScreen}
+        options={{ headerTintColor: 'white' }}
+      />
+      <Stack.Screen
+        name="Search"
+        component={GradientSearchScreen}
+        options={{ headerTintColor: Colors.PINK }}
+      />
+      <Stack.Screen
+        name="Detail"
+        component={GradientDetailScreen}
+        options={{ headerTintColor: 'white' }}
+      />
     </Stack.Navigator>
   );
 };

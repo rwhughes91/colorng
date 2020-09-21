@@ -1,34 +1,26 @@
+import ExploreHeader from '@components/headers/ExploreHeader';
 import Layout from '@components/layouts/Layout';
 import { NavigationScreenProps } from '@navigations/GradientNavigator';
 import React from 'react';
-import { Text, Button } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 type Props = NavigationScreenProps<'Home'>;
 
-const HomeScreen: React.FC<Props> = (props) => {
+const HomeScreen: React.FC<Props> = () => {
   return (
-    <Layout>
-      <Text>Home!</Text>
-      <Button
-        title="Detail"
-        onPress={() => {
-          props.navigation.navigate('Detail');
-        }}
-      />
-      <Button
-        title="List"
-        onPress={() => {
-          props.navigation.navigate('List');
-        }}
-      />
-      <Button
-        title="Search"
-        onPress={() => {
-          props.navigation.navigate('Search');
-        }}
-      />
+    <Layout gradient>
+      <View style={styles.container}>
+        <ExploreHeader title="Explore Colors" />
+      </View>
     </Layout>
   );
 };
 
-export default HomeScreen;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: '75%',
+  },
+});
+
+export default React.memo(HomeScreen);

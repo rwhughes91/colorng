@@ -1,3 +1,4 @@
+import BackDrop from '@components/ui/BackDrop';
 import { HeaderHeightContext } from '@react-navigation/stack';
 import { Colors } from '@styles/index';
 import React, { useContext } from 'react';
@@ -6,6 +7,10 @@ import { View, StyleSheet, SafeAreaView, Platform, StatusBar } from 'react-nativ
 interface Props {
   whiteBackground?: boolean;
   header?: boolean;
+  gradient?: boolean;
+  gradientColors?: string[];
+  backdropPosition?: number;
+  children: React.ReactNode;
 }
 
 const Layout: React.FC<Props> = (props) => {
@@ -16,6 +21,7 @@ const Layout: React.FC<Props> = (props) => {
   }
   return (
     <View style={layoutStyles}>
+      {props.gradient && <BackDrop colors={props.gradientColors} top={props.backdropPosition} />}
       <SafeAreaView
         style={{
           ...styles.container,
@@ -35,8 +41,12 @@ const styles = StyleSheet.create({
   layout: {
     flex: 1,
     backgroundColor: Colors.PEACH,
+    alignItems: 'center',
   },
   container: {
     flex: 1,
+    alignSelf: 'stretch',
+    zIndex: 1,
+    alignItems: 'center',
   },
 });

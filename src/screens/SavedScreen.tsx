@@ -7,7 +7,7 @@ type Props = NavigationScreenProps<'Saved'>;
 
 const SavedScreen: React.FC<Props> = () => {
   return (
-    <Layout>
+    <Layout gradient gradientColors={['white', 'white']} backdropPosition={150}>
       <Text>Saved!</Text>
     </Layout>
   );

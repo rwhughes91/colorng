@@ -7,7 +7,7 @@ type Props = NavigationScreenProps<'Image'>;
 
 const CreateFromImageScreen: React.FC<Props> = () => {
   return (
-    <Layout header whiteBackground>
+    <Layout header whiteBackground gradient>
       <Text>Create from Image!</Text>
     </Layout>
   );

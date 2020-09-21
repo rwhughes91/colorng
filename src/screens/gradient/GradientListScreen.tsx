@@ -7,7 +7,7 @@ type Props = NavigationScreenProps<'List'>;
 
 const GradientListScreen: React.FC<Props> = () => {
   return (
-    <Layout header>
+    <Layout header gradient>
       <Text>Gradient List</Text>
     </Layout>
   );

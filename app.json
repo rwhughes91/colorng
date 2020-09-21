@@ -16,7 +16,7 @@
     },
     "assetBundlePatterns": ["src/assets/images/*", "src/assets/fonts/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false
     },
     "web": {
       "favicon": "./src/assets/images/favicon.png"

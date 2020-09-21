@@ -4,7 +4,7 @@ import { createStackNavigator, StackNavigationProp } from '@react-navigation/sta
 import CreateFromImageScreen from '@screens/create/CreateFromImageScreen';
 import CreateFromInputScreen from '@screens/create/CreateFromInputScreen';
 import CreateScreen from '@screens/create/CreateScreen';
-import { Colors, Spacing } from '@styles/index';
+import { Spacing, Colors } from '@styles/index';
 import React from 'react';
 import { Platform } from 'react-native';
 
@@ -27,14 +27,22 @@ const CreateNavigator = () => {
       screenOptions={{
         headerTransparent: true,
         headerTitle: '',
-        headerBackImage: () => <BackIcon size={30} color={Colors.PINK} />,
+        headerBackImage: ({ tintColor }) => <BackIcon size={30} color={tintColor} />,
         headerBackTitleVisible: false,
         headerLeftContainerStyle: { paddingLeft: Platform.OS === 'ios' ? Spacing.SCALE_12 : 0 },
       }}
     >
-      <Stack.Screen name="Create" component={CreateScreen} />
-      <Stack.Screen name="Image" component={CreateFromImageScreen} />
-      <Stack.Screen name="Input" component={CreateFromInputScreen} />
+      <Stack.Screen name="Create" component={CreateScreen} options={{ headerShown: false }} />
+      <Stack.Screen
+        name="Image"
+        component={CreateFromImageScreen}
+        options={{ headerTintColor: 'white' }}
+      />
+      <Stack.Screen
+        name="Input"
+        component={CreateFromInputScreen}
+        options={{ headerTintColor: Colors.PINK }}
+      />
     </Stack.Navigator>
   );
 };

@@ -7,7 +7,7 @@ type Props = NavigationScreenProps<'Profile'>;
 
 const ProfileScreen: React.FC<Props> = () => {
   return (
-    <Layout>
+    <Layout whiteBackground>
       <Text>Settings!</Text>
     </Layout>
   );

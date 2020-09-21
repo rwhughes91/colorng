@@ -7,7 +7,7 @@ type Props = NavigationScreenProps<'Create'>;
 
 const CreateScreen: React.FC<Props> = (props) => {
   return (
-    <Layout>
+    <Layout gradient>
       <Text>Create!</Text>
       <Button
         title="Image"

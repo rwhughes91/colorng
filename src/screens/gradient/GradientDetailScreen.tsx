@@ -7,7 +7,7 @@ type Props = NavigationScreenProps<'Detail'>;
 
 const GradientDetailScreen: React.FC<Props> = () => {
   return (
-    <Layout header whiteBackground>
+    <Layout header whiteBackground gradient>
       <Text>Gradient Detail</Text>
     </Layout>
   );
