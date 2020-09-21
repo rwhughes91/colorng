@@ -18,3 +18,4 @@ export const ALERT = '#cc4b37';
 
 // GRAYSCALE
 export const GRAY = '#8E8B8B';
+export const LIGHT_GRAY = 'rgba(142, 139, 139, .15)';

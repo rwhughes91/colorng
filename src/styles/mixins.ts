@@ -1,3 +1,4 @@
+import * as Constants from '@constants/index';
 import { Dimensions, PixelRatio } from 'react-native';
 
 const WINDOW_WIDTH = Dimensions.get('window').width;
@@ -49,3 +50,10 @@ export function boxShadow(
     elevation: radius,
   };
 }
+
+export const sizeResponse = (x: string | number, y: string | number) => {
+  if (Constants.DEVICE_WIDTH > Constants.BREAKPOINT) {
+    return y;
+  }
+  return x;
+};

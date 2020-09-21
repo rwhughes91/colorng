@@ -1,7 +1,9 @@
 import HeaderContainer from '@components/layouts/HeaderContainer';
 import SearchInput from '@components/ui/inputs/SearchInput';
 import HeaderText from '@components/ui/text/HeaderText';
+import { Globals } from '@styles/index';
 import React from 'react';
+import { StyleSheet } from 'react-native';
 
 interface Props {
   title: string;
@@ -9,11 +11,18 @@ interface Props {
 
 const ExploreHeader: React.FC<Props> = (props) => {
   return (
-    <HeaderContainer>
+    <HeaderContainer styles={styles.header}>
       <SearchInput />
       <HeaderText>{props.title}</HeaderText>
     </HeaderContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  header: {
+    width: Globals.CONTENT_WIDTH,
+    maxWidth: Globals.MAX_CONTENT_WIDTH,
+  },
+});
 
 export default React.memo(ExploreHeader);

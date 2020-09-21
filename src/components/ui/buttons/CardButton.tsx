@@ -5,10 +5,11 @@ import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 interface Props {
   color?: string;
   size?: number;
+  children: string;
 }
 
 const CardButton: React.FC<Props> = (props) => {
-  const fontSize = props.size || Typography.FONT_SIZE_14;
+  const fontSize = props.size || Typography.FONT_SIZE_16;
   const color = props.color || Colors.BLUE;
   return (
     <TouchableOpacity style={styles.container}>

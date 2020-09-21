@@ -9,7 +9,7 @@ interface Props {
 }
 
 const HeaderText: React.FC<Props> = (props) => {
-  const fontSize = props.size || Typography.FONT_SIZE_26;
+  const fontSize = props.size || Typography.FONT_SIZE_24;
   const color = props.color || 'white';
   return <TextNative style={{ ...styles.text, fontSize, color }}>{props.children}</TextNative>;
 };

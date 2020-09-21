@@ -9,8 +9,6 @@ interface Props {
   top?: number;
 }
 
-const backDropSize = Constants.DEVICE_WIDTH;
-
 const BackDrop: React.FC<Props> = (props) => {
   return (
     <LinearGradient
@@ -29,9 +27,9 @@ const BackDrop: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
   backDrop: {
-    width: backDropSize,
-    height: backDropSize,
-    borderRadius: backDropSize / 2,
+    width: Constants.DEVICE_WIDTH,
+    height: Constants.DEVICE_WIDTH,
+    borderRadius: Constants.DEVICE_WIDTH / 2,
     position: 'absolute',
     zIndex: 0,
     overflow: 'hidden',
