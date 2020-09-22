@@ -1,7 +1,7 @@
 import CreateGradientCard from '@components/cards/CreateGradientCard';
 import FavoritesCard from '@components/cards/FavoritesCard';
 import TodaysGradientsCard from '@components/cards/TodaysGradientsCard';
-import ExploreHeader from '@components/headers/ExploreHeader';
+import HeaderWithInputTop from '@components/headers/HeaderWithInputTop';
 import Layout from '@components/layouts/Layout';
 import Carousel from '@components/ui/Carousel';
 import { NavigationScreenProps } from '@navigations/GradientNavigator';
@@ -15,7 +15,7 @@ const HomeScreen: React.FC<Props> = () => {
   return (
     <Layout gradient>
       <View style={styles.container}>
-        <ExploreHeader title="Explore Colors" />
+        <HeaderWithInputTop title="Explore Colors" />
         <Carousel items={cards} itemsPerInterval={1} />
       </View>
     </Layout>

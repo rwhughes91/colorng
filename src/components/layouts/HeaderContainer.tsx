@@ -1,5 +1,4 @@
 import * as Constants from '@constants/index';
-import { Spacing, Mixins } from '@styles/index';
 import React from 'react';
 import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 
@@ -14,10 +13,9 @@ const HeaderContainer: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
   header: {
-    paddingVertical: Spacing.SCALE_25,
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
-    height: Mixins.sizeResponse(Constants.DEVICE_WIDTH / 2.5, Constants.DEVICE_WIDTH / 3),
+    height: Constants.DEVICE_HEIGHT * 0.2,
   },
 });
 

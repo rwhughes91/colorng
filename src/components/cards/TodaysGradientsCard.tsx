@@ -7,7 +7,8 @@ const TodaysGradientsCard: React.FC = () => {
     <Card
       header="Today's Featured Gradients"
       description="Check out our daily generated gradients"
-      svg={<ColorSvg size="100%" />}
+      body={<ColorSvg size="100%" />}
+      locationName="List"
     />
   );
 };

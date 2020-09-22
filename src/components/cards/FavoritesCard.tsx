@@ -7,8 +7,9 @@ const FavoritesCard: React.FC = () => {
     <Card
       header="Our Favorites"
       description="Our most popular gradients"
-      svg={<PopularSvg size="100%" />}
-      svgStyles={{ width: '75%' }}
+      body={<PopularSvg size="100%" />}
+      bodyStyles={{ width: '75%' }}
+      locationName="Search"
     />
   );
 };

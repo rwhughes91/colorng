@@ -26,7 +26,8 @@ const Layout: React.FC<Props> = (props) => {
         style={{
           ...styles.container,
           paddingTop: !props.header && Platform.OS === 'android' ? StatusBar.currentHeight : 0,
-          marginTop: props.header ? headerHeight || 0 : 0,
+          marginTop: props.header && headerHeight ? headerHeight / 1.5 : 0,
+          borderColor: 'red',
         }}
       >
         {props.children}

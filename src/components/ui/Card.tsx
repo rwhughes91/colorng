@@ -7,10 +7,12 @@ import { verticalScale, moderateVerticalScale } from 'react-native-size-matters'
 
 interface Props {
   header: string;
-  svg: React.ReactNode;
+  body: React.ReactNode;
   description: string;
+  locationName: string;
   buttonText?: string;
-  svgStyles?: StyleProp<ViewStyle>;
+  bodyStyles?: StyleProp<ViewStyle>;
+  noBorder?: boolean;
 }
 
 const Card: React.FC<Props> = (props) => {
@@ -22,9 +24,17 @@ const Card: React.FC<Props> = (props) => {
         </Text>
         <Text color={Colors.GRAY}>{props.description}</Text>
       </View>
-      <View style={[styles.svgContainer, props.svgStyles]}>{props.svg}</View>
-      <View style={styles.buttonContainer}>
-        <CardButton>{props.buttonText || 'More'}</CardButton>
+      <View style={[styles.bodyContainer, props.bodyStyles]}>{props.body}</View>
+      <View
+        style={[
+          styles.buttonContainer,
+          {
+            borderTopColor: Colors.LIGHT_GRAY,
+            borderTopWidth: props.noBorder ? 0 : 1,
+          },
+        ]}
+      >
+        <CardButton locationName={props.locationName}>{props.buttonText || 'More'}</CardButton>
       </View>
     </View>
   );
@@ -32,10 +42,11 @@ const Card: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
   card: {
+    flex: 1,
     width: Globals.CONTENT_WIDTH,
     maxWidth: Globals.MAX_CONTENT_WIDTH,
     backgroundColor: 'white',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
     alignItems: 'center',
     borderRadius: Globals.BORDER_RADIUS,
     ...Globals.BOX_SHADOW,
@@ -49,17 +60,15 @@ const styles = StyleSheet.create({
   textStyles: {
     paddingBottom: Spacing.SCALE_8,
   },
-  svgContainer: {
+  bodyContainer: {
+    flex: 1,
     width: '90%',
-    height: verticalScale(250),
   },
   buttonContainer: {
     width: '100%',
-    paddingVertical: moderateVerticalScale(16),
     justifyContent: 'center',
     alignItems: 'center',
-    borderTopColor: Colors.LIGHT_GRAY,
-    borderTopWidth: 1,
+    paddingVertical: moderateVerticalScale(16),
   },
 });
 

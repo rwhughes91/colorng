@@ -57,3 +57,14 @@ export const sizeResponse = (x: string | number, y: string | number) => {
   }
   return x;
 };
+
+export function roundCornersRadius(type: 'first' | 'last', borderRadius: number) {
+  if (type === 'first') {
+    return {
+      borderTopLeftRadius: borderRadius,
+    };
+  }
+  return {
+    borderBottomLeftRadius: borderRadius,
+  };
+}

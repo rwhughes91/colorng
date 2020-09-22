@@ -1,5 +1,5 @@
 import * as Constants from '@constants/index';
-import { Colors } from '@styles/index';
+import { Colors, Mixins } from '@styles/index';
 import React, { useState, useCallback } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 
@@ -81,7 +81,9 @@ const Carousel: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     width: Constants.DEVICE_WIDTH,
+    maxHeight: Mixins.sizeResponse(500, 600),
   },
   carousel: {
     flexDirection: 'row',
@@ -104,8 +106,8 @@ const styles = StyleSheet.create({
     left: 0,
   },
   bullet: {
-    width: 13,
-    height: 13,
+    width: Mixins.sizeResponse(10, 13),
+    height: Mixins.sizeResponse(10, 13),
     borderRadius: 13 / 2,
     marginHorizontal: 5,
   },

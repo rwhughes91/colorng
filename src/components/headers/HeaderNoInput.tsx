@@ -1,5 +1,4 @@
 import HeaderContainer from '@components/layouts/HeaderContainer';
-import SearchInput from '@components/ui/inputs/SearchInput';
 import HeaderText from '@components/ui/text/HeaderText';
 import { Globals } from '@styles/index';
 import React from 'react';
@@ -9,10 +8,9 @@ interface Props {
   title: string;
 }
 
-const ExploreHeader: React.FC<Props> = (props) => {
+const HeaderNoInput: React.FC<Props> = (props) => {
   return (
     <HeaderContainer styles={styles.header}>
-      <SearchInput />
       <HeaderText>{props.title}</HeaderText>
     </HeaderContainer>
   );
@@ -25,4 +23,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default React.memo(ExploreHeader);
+export default React.memo(HeaderNoInput);
