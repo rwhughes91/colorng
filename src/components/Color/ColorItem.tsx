@@ -1,13 +1,16 @@
 import HeartIcon from '@components/icons/HeartIcon';
-import { Colors, Typography } from '@styles/index';
+import Text from '@components/ui/text/Text';
+import { Colors } from '@styles/index';
 import React from 'react';
-import { View, Text, StyleSheet, StyleProp, ViewStyle, TextStyle } from 'react-native';
+import { View, StyleSheet, StyleProp, ViewStyle, TextStyle } from 'react-native';
+
+import Color from './Color';
 
 interface Props {
   name: string;
   color: string;
-  height: number;
   icon?: boolean;
+  fill?: boolean;
   styles?: StyleProp<ViewStyle>;
   colorStyles?: StyleProp<ViewStyle>;
   textStylesView?: StyleProp<ViewStyle>;
@@ -16,10 +19,12 @@ interface Props {
 
 const ColorItem: React.FC<Props> = (props) => {
   return (
-    <View style={[styles.container, { paddingLeft: props.height * 1.5 }, props.styles]}>
-      <View style={[styles.color, props.colorStyles, { backgroundColor: props.color }]} />
+    <View style={[styles.container, { flex: props.fill ? 1 : 0 }, props.styles]}>
+      <Color color={props.color} colorStyles={props.colorStyles} fill={props.fill} scaleVertical />
       <View style={[styles.TextContainer, props.textStylesView]}>
-        <Text style={[styles.name, props.textStyles]}>{props.name}</Text>
+        <Text color={Colors.BLUE} styles={props.textStyles}>
+          {props.name}
+        </Text>
         {props.icon && <HeartIcon size={24} focused={false} color={Colors.GRAY} />}
       </View>
     </View>
@@ -28,25 +33,16 @@ const ColorItem: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    borderColor: Colors.LIGHT_GRAY,
-    borderBottomWidth: 1,
-  },
-  color: {
-    position: 'absolute',
-    height: '100%',
-    aspectRatio: 1,
-  },
-  name: {
-    color: Colors.BLUE,
-    fontSize: Typography.FONT_SIZE_16,
-    ...Typography.FONT_REGULAR,
+    flexDirection: 'row',
   },
   TextContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    paddingLeft: 20,
+    borderColor: Colors.LIGHT_GRAY,
+    borderBottomWidth: 1,
   },
 });
 

@@ -2,7 +2,7 @@ import * as Constants from '@constants/index';
 import { Colors, Globals } from '@styles/index';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 interface Props {
   colors?: string[];
@@ -11,17 +11,20 @@ interface Props {
 
 const BackDrop: React.FC<Props> = (props) => {
   return (
-    <LinearGradient
-      style={{
-        ...styles.backDrop,
-        transform: [
-          { scaleX: 1.5 },
-          { translateY: props.top || Globals.HEADER_TRANSLATE_Y * -1 },
-          { rotate: '-90deg' },
-        ],
-      }}
-      colors={props.colors ? props.colors : [Colors.ORANGE, Colors.PINK]}
-    />
+    <>
+      <LinearGradient
+        style={{
+          ...styles.backDrop,
+          transform: [
+            { scaleX: 1.5 },
+            { translateY: props.top || Globals.HEADER_TRANSLATE_Y * -1 },
+            { rotate: '-90deg' },
+          ],
+        }}
+        colors={props.colors ? props.colors : [Colors.ORANGE, Colors.PINK]}
+      />
+      {props.top && <View style={styles.cover} />}
+    </>
   );
 };
 
@@ -35,6 +38,14 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     alignItems: 'flex-start',
     justifyContent: 'center',
+  },
+  cover: {
+    backgroundColor: 'white',
+    width: Constants.DEVICE_WIDTH,
+    height: Constants.DEVICE_HEIGHT,
+    position: 'absolute',
+    zIndex: -1,
+    top: '50%',
   },
 });
 

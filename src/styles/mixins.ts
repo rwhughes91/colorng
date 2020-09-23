@@ -51,7 +51,7 @@ export function boxShadow(
   };
 }
 
-export const sizeResponse = (x: string | number, y: string | number) => {
+export const sizeResponse = (x: string | number, y: string | number): string | number => {
   if (Constants.DEVICE_WIDTH > Constants.BREAKPOINT) {
     return y;
   }

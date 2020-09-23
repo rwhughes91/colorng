@@ -24,7 +24,7 @@
       "@constants/*": ["./src/constants/*"],
       "@navigations/*": ["./src/navigations/*"],
       "@assets/*": ["./src/assets/*"],
-      "@types/*": ["./src/types/*"]
+      "@typeDefs/*": ["./src/types/*"]
     }
   },
   "exclude": ["node_modules"]

@@ -3,7 +3,7 @@ import Text from '@components/ui/text/Text';
 import { Colors, Typography, Globals, Spacing } from '@styles/index';
 import React from 'react';
 import { View, StyleSheet, ViewStyle, StyleProp } from 'react-native';
-import { verticalScale, moderateVerticalScale } from 'react-native-size-matters';
+import { moderateVerticalScale } from 'react-native-size-matters';
 
 interface Props {
   header: string;
@@ -54,11 +54,10 @@ const styles = StyleSheet.create({
   textContainer: {
     width: '100%',
     paddingTop: Spacing.SCALE_12,
-    justifyContent: 'space-between',
     alignItems: 'center',
   },
   textStyles: {
-    paddingBottom: Spacing.SCALE_8,
+    paddingBottom: 5,
   },
   bodyContainer: {
     flex: 1,

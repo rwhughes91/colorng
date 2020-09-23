@@ -6,12 +6,13 @@ import { StyleSheet } from 'react-native';
 
 interface Props {
   title: string;
+  titleColor?: string;
 }
 
 const HeaderNoInput: React.FC<Props> = (props) => {
   return (
     <HeaderContainer styles={styles.header}>
-      <HeaderText>{props.title}</HeaderText>
+      <HeaderText color={props.titleColor}>{props.title}</HeaderText>
     </HeaderContainer>
   );
 };

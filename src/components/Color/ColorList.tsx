@@ -1,26 +1,23 @@
-import { Mixins } from '@styles/index';
+import { Mixins, Colors } from '@styles/index';
+import { Colors as ColorsType } from '@typeDefs/index';
 import React from 'react';
 import { StyleProp, View, ViewStyle, StyleSheet, TextStyle } from 'react-native';
 
 import ColorItem from './ColorItem';
-
 interface Props {
-  items: { name: string; color: string }[];
-  height: number;
+  items: ColorsType;
+  fill?: boolean;
   styles?: StyleProp<ViewStyle>;
   textStylesView?: StyleProp<ViewStyle>;
   textStyles?: StyleProp<TextStyle>;
   icon?: boolean;
-  alignItems?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline';
 }
 
 const ColorList: React.FC<Props> = (props) => {
   const listItemStyles: object = props.styles || {};
   const items = props.items.map((item, i) => {
-    let additionalStyles = {};
     let colorStyles = {};
     if (i === 0) {
-      additionalStyles = { borderTopWidth: 1 };
       colorStyles = Mixins.roundCornersRadius('first', 3);
     }
     if (i === props.items.length - 1) {
@@ -33,8 +30,8 @@ const ColorList: React.FC<Props> = (props) => {
         name={item.name}
         color={item.color}
         icon={props.icon}
-        styles={[listItemStyles, additionalStyles]}
-        height={props.height}
+        styles={listItemStyles}
+        fill={props.fill}
         colorStyles={colorStyles}
         textStylesView={props.textStylesView}
         textStyles={props.textStyles}
@@ -42,15 +39,24 @@ const ColorList: React.FC<Props> = (props) => {
     );
   });
   return (
-    <View style={[styles.colorList, { alignItems: props.alignItems || 'stretch' }]}>{items}</View>
+    <View
+      style={[
+        styles.colorList,
+        {
+          flex: props.fill ? 1 : 0,
+        },
+      ]}
+    >
+      {items}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   colorList: {
-    flex: 1,
-    justifyContent: 'center',
     marginTop: 10,
+    borderColor: Colors.LIGHT_GRAY,
+    borderTopWidth: 1,
   },
 });
 
