@@ -1,15 +1,13 @@
 import BackIcon from '@components/icons/BackIcon';
 import { RouteProp } from '@react-navigation/native';
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
+import SavedScreen from '@screens/SavedScreen';
 import GradientDetailScreen from '@screens/gradient/GradientDetailScreen';
-import GradientListScreen from '@screens/gradient/GradientListScreen';
-import GradientSearchScreen from '@screens/gradient/GradientSearchScreen';
-import HomeScreen from '@screens/gradient/HomeScreen';
-import { Spacing, Colors } from '@styles/index';
+import { Spacing } from '@styles/index';
 import React from 'react';
 import { Platform } from 'react-native';
 
-type Params = 'Home' | 'List' | 'Search' | 'Detail';
+type Params = 'Home' | 'Detail';
 
 type GradientStackParamList = {
   [param in Params]: undefined;
@@ -33,17 +31,7 @@ const GradientNavigator = () => {
         headerLeftContainerStyle: { paddingLeft: Platform.OS === 'ios' ? Spacing.SCALE_12 : 0 },
       }}
     >
-      <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-      <Stack.Screen
-        name="List"
-        component={GradientListScreen}
-        options={{ headerTintColor: 'white' }}
-      />
-      <Stack.Screen
-        name="Search"
-        component={GradientSearchScreen}
-        options={{ headerTintColor: Colors.PINK }}
-      />
+      <Stack.Screen name="Home" component={SavedScreen} options={{ headerShown: false }} />
       <Stack.Screen
         name="Detail"
         component={GradientDetailScreen}

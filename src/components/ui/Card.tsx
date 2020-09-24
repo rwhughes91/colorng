@@ -1,6 +1,7 @@
 import CardButton from '@components/ui/buttons/CardButton';
 import Text from '@components/ui/text/Text';
 import { Colors, Typography, Globals, Spacing } from '@styles/index';
+import { Navigation } from '@typeDefs/index';
 import React from 'react';
 import { View, StyleSheet, ViewStyle, StyleProp } from 'react-native';
 import { moderateVerticalScale } from 'react-native-size-matters';
@@ -9,7 +10,7 @@ interface Props {
   header: string;
   body: React.ReactNode;
   description: string;
-  locationName: string;
+  navigation: Navigation;
   buttonText?: string;
   bodyStyles?: StyleProp<ViewStyle>;
   noBorder?: boolean;
@@ -34,7 +35,7 @@ const Card: React.FC<Props> = (props) => {
           },
         ]}
       >
-        <CardButton locationName={props.locationName}>{props.buttonText || 'More'}</CardButton>
+        <CardButton navigation={props.navigation}>{props.buttonText || 'More'}</CardButton>
       </View>
     </View>
   );

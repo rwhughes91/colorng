@@ -24,3 +24,8 @@ export const MAX_CONTENT_WIDTH = 500;
 // Color Squares
 export const COLOR_SIZE = moderateScale(50);
 export const COLOR_SIZE_VERTICAL = moderateVerticalScale(55);
+
+// Header Height & Spacing
+const extraSpace = Constants.DEVICE_HEIGHT * 0.2 - 34 - COMPONENT_HEIGHT;
+export const HEADER_MARGINS = extraSpace / 3;
+export const HEADER_HEIGHT = extraSpace / 3 + 34 + COMPONENT_HEIGHT;

@@ -8,7 +8,7 @@ const CreateGradientsCard: React.FC = () => {
       header="Create Your Own"
       description="Generate some awesome gradients"
       body={<AddColorSvg size="100%" />}
-      locationName="Create"
+      navigation={{ name: 'Create' }}
     />
   );
 };

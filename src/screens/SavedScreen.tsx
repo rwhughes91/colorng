@@ -1,6 +1,6 @@
 import ColorList from '@components/Color/ColorList';
 import GradientList from '@components/Gradient/GradientList';
-import HeaderNoInput from '@components/headers/HeaderNoInput';
+import Header from '@components/layouts/Header';
 import Layout from '@components/layouts/Layout';
 import TabView from '@components/ui/TabView';
 import * as Constants from '@constants/index';
@@ -21,7 +21,9 @@ const colors = [
   { color: '#DFCC73', name: 'Gold' },
 ];
 
-const gradients: Gradients = [{ name: 'Architecture', likes: 112, colors }];
+const gradients: Gradients = [
+  { name: 'Architecture', description: 'Somber, serious, and mild', likes: 112, colors },
+];
 
 const SavedScreen: React.FC<Props> = () => {
   return (
@@ -32,17 +34,20 @@ const SavedScreen: React.FC<Props> = () => {
         backdropPosition={Constants.DEVICE_HEIGHT * 0.2}
       >
         <View style={styles.container}>
-          <HeaderNoInput title="Saved Colors" titleColor={Colors.PINK} />
+          <Header
+            title={{ text: 'Saved Colors', location: 'above', color: Colors.PINK }}
+            styles={{ justifyContent: 'center' }}
+          />
           <View style={styles.cover}>
             <TabView
               tabs={[
                 { name: 'Gradients', component: <GradientList gradients={gradients} /> },
                 {
                   name: 'Colors',
-                  component: <ColorList items={colors} icon />,
+                  component: <ColorList items={colors} icon flatList />,
                 },
               ]}
-              styles={{ marginTop: moderateVerticalScale(15, -2) }}
+              styles={{ marginTop: moderateVerticalScale(20, -3) }}
             />
           </View>
         </View>

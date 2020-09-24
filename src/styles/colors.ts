@@ -10,6 +10,7 @@ export const PINK = '#F48982';
 export const ORANGE = '#FBDB89';
 export const PEACH = '#F9F5F3';
 export const BLUE = '#232380';
+export const PURPLE = '#7272AD';
 
 // ACTIONS
 export const SUCCESS = '#3adb76';

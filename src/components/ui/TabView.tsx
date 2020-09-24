@@ -1,5 +1,5 @@
 import Text from '@components/ui/text/Text';
-import { Colors, Globals } from '@styles/index';
+import { Colors, Globals, Typography } from '@styles/index';
 import React, { useState, useCallback, useRef } from 'react';
 import { View, StyleSheet, TouchableOpacity, Animated, StyleProp, ViewStyle } from 'react-native';
 import { moderateVerticalScale } from 'react-native-size-matters';
@@ -7,32 +7,61 @@ import { moderateVerticalScale } from 'react-native-size-matters';
 interface Props {
   tabs: { name: string; component: React.ReactNode }[];
   styles?: StyleProp<ViewStyle>;
+  fontSize?: number;
 }
 
-const BORDER_SIZE = 90;
+// const BORDER_SIZE = 90;
 const MARGIN_RIGHT = 25;
+const PADDING_HORIZONTAL = 10;
 
 const TabView: React.FC<Props> = (props) => {
+  const fontSize = props.fontSize || Typography.FONT_SIZE_16;
+
+  const calculateWidth = useCallback(
+    (name: string) => {
+      return name.length * (fontSize / 1.925) + PADDING_HORIZONTAL;
+    },
+    [fontSize]
+  );
+
   const slideAnim = useRef(new Animated.Value(0)).current;
+  const widthAnim = useRef(new Animated.Value(calculateWidth(props.tabs[0].name))).current;
 
   const [activeTab, setActiveTab] = useState(0);
+
+  const currentTabWidth = calculateWidth(props.tabs[activeTab].name);
 
   const switchTabs = useCallback(
     (index: number) => {
       setActiveTab(index);
-      Animated.timing(slideAnim, {
-        toValue: (BORDER_SIZE + MARGIN_RIGHT) * index,
-        duration: 150,
-        useNativeDriver: true,
-      }).start();
+      Animated.parallel([
+        Animated.timing(widthAnim, {
+          toValue: props.tabs[index].name.length * (fontSize / 1.9) + PADDING_HORIZONTAL,
+          duration: 150,
+          useNativeDriver: false,
+        }),
+        Animated.timing(slideAnim, {
+          toValue: (currentTabWidth + MARGIN_RIGHT) * index,
+          duration: 150,
+          useNativeDriver: false,
+        }),
+      ]).start();
     },
-    [slideAnim]
+    [fontSize, props.tabs, widthAnim, slideAnim, currentTabWidth]
   );
 
   return (
     <View style={[styles.container, props.styles]}>
       <View style={styles.tabHeaderContainer}>
-        <Animated.View style={[styles.activeBorder, { transform: [{ translateX: slideAnim }] }]} />
+        <Animated.View
+          style={[
+            styles.activeBorder,
+            {
+              width: widthAnim,
+              transform: [{ translateX: slideAnim }],
+            },
+          ]}
+        />
         {props.tabs.map((tab, i) => {
           return (
             <TouchableOpacity
@@ -41,7 +70,9 @@ const TabView: React.FC<Props> = (props) => {
               activeOpacity={1}
               style={styles.tabHeader}
             >
-              <Text color={activeTab === i ? Colors.PINK : Colors.GRAY}>{tab.name}</Text>
+              <Text color={activeTab === i ? Colors.PINK : Colors.GRAY} size={fontSize}>
+                {tab.name}
+              </Text>
             </TouchableOpacity>
           );
         })}
@@ -64,18 +95,18 @@ const styles = StyleSheet.create({
   },
   tabHeader: {
     alignSelf: 'stretch',
-    width: BORDER_SIZE,
     paddingVertical: moderateVerticalScale(12, 0.3),
-    paddingHorizontal: 5,
+    paddingHorizontal: PADDING_HORIZONTAL / 2,
     marginRight: MARGIN_RIGHT,
     alignItems: 'center',
+    borderColor: 'transparent',
+    borderWidth: 1,
   },
   componentContainer: {
     marginTop: MARGIN_RIGHT * 1.5,
     flex: 1,
   },
   activeBorder: {
-    width: BORDER_SIZE,
     height: 2,
     borderRadius: Globals.BORDER_RADIUS,
     backgroundColor: Colors.PINK,

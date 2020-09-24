@@ -9,7 +9,7 @@ const FavoritesCard: React.FC = () => {
       description="Our most popular gradients"
       body={<PopularSvg size="100%" />}
       bodyStyles={{ width: '75%' }}
-      locationName="Search"
+      navigation={{ name: 'Search' }}
     />
   );
 };

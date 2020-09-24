@@ -1,11 +1,9 @@
 import ColorList from '@components/Color/ColorList';
 import Card from '@components/ui/Card';
-import { Colors } from '@typeDefs/index';
+import { Gradient } from '@typeDefs/index';
 import React from 'react';
 
-interface Props {
-  colors: Colors;
-}
+type Props = Gradient;
 
 const GradientCard: React.FC<Props> = (props) => {
   return (
@@ -13,8 +11,8 @@ const GradientCard: React.FC<Props> = (props) => {
       header="Architecture"
       description="Somber, serious, and mild"
       body={<ColorList items={props.colors} fill />}
-      locationName="Detail"
       noBorder
+      navigation={{ name: 'Detail', params: props }}
     />
   );
 };

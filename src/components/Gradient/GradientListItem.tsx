@@ -1,10 +1,11 @@
 import Color from '@components/Color/Color';
 import ForwardButton from '@components/ui/buttons/ForwardButton';
 import Text from '@components/ui/text/Text';
+import useNavigation from '@hooks/useNavigation';
 import { Colors, Globals } from '@styles/index';
 import { Gradient } from '@typeDefs/index';
-import React from 'react';
-import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
+import React, { useCallback } from 'react';
+import { View, StyleSheet, StyleProp, ViewStyle, TouchableOpacity } from 'react-native';
 import { moderateVerticalScale } from 'react-native-size-matters';
 
 interface Props extends Gradient {
@@ -13,8 +14,22 @@ interface Props extends Gradient {
 }
 
 const GradientListItem: React.FC<Props> = (props) => {
+  const navigateToDetail = useNavigation({
+    name: 'Detail',
+    params: {
+      name: props.name,
+      likes: props.likes,
+      description: props.description,
+      colors: props.colors,
+    },
+  });
+
+  const onClickHandler = useCallback(() => {
+    navigateToDetail();
+  }, [navigateToDetail]);
+
   return (
-    <View style={[styles.gradientList]}>
+    <TouchableOpacity style={[styles.gradientList]} activeOpacity={0.9} onPress={onClickHandler}>
       <View style={[styles.textContainer, { width: Globals.COLOR_SIZE * 5 }]}>
         <Text color={Colors.BLUE}>{props.name}</Text>
         <Text color={Colors.PINK}>{`${props.likes} likes`}</Text>
@@ -48,7 +63,7 @@ const GradientListItem: React.FC<Props> = (props) => {
           <ForwardButton size={Globals.COLOR_SIZE} iconSize={props.iconSize} />
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

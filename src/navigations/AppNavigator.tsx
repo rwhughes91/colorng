@@ -5,12 +5,12 @@ import ProfileIcon from '@components/icons/ProfileIcon';
 import { createBottomTabNavigator, BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, RouteProp } from '@react-navigation/native';
 import ProfileScreen from '@screens/ProfileScreen';
-import SavedScreen from '@screens/SavedScreen';
 import { Colors } from '@styles/index';
 import React from 'react';
 
 import CreateNavigator from './CreateNavigator';
 import GradientNavigator from './GradientNavigator';
+import SavedNavigator from './SavedNavigator';
 
 type Params = 'Home' | 'Saved' | 'Create' | 'Profile';
 
@@ -46,7 +46,7 @@ const Navigation = () => {
         />
         <Tab.Screen
           name="Saved"
-          component={SavedScreen}
+          component={SavedNavigator}
           options={{
             tabBarIcon: ({ focused, size, color }) => (
               <HeartIcon focused={focused} size={size} color={color} />
