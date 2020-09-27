@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     marginBottom: moderateVerticalScale(5, 0.2),
     paddingRight: moderateScale(10, 0.2),
     paddingLeft: moderateScale(5, 0.2),
-    paddingVertical: moderateVerticalScale(2, 0.2),
+    paddingVertical: moderateVerticalScale(4, 0.2),
   },
   delete: {
     paddingHorizontal: moderateScale(5, 0.2),

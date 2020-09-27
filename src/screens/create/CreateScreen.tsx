@@ -1,26 +1,16 @@
+import CreateCard from '@components/cards/CreateCard';
+import Header from '@components/layouts/Header/Header';
 import Layout from '@components/layouts/Layout';
 import { NavigationScreenProps } from '@navigations/CreateNavigator';
 import React from 'react';
-import { Text, Button } from 'react-native';
 
 type Props = NavigationScreenProps<'Create'>;
 
 const CreateScreen: React.FC<Props> = (props) => {
   return (
     <Layout gradient>
-      <Text>Create!</Text>
-      <Button
-        title="Image"
-        onPress={() => {
-          props.navigation.navigate('Image');
-        }}
-      />
-      <Button
-        title="Input"
-        onPress={() => {
-          props.navigation.navigate('Input');
-        }}
-      />
+      <Header title={{ text: 'Create a Gradient', location: 'below' }} showInput />
+      <CreateCard navigation={props.navigation} route={props.route} />
     </Layout>
   );
 };

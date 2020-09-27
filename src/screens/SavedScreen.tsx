@@ -1,17 +1,54 @@
 import ColorList from '@components/Color/ColorList';
 import GradientList from '@components/Gradient/GradientList';
-import Header from '@components/layouts/Header';
+import Header from '@components/layouts/Header/Header';
 import Layout from '@components/layouts/Layout';
 import TabView from '@components/ui/TabView';
-import * as Constants from '@constants/index';
 import { NavigationScreenProps } from '@navigations/AppNavigator';
-import { Colors } from '@styles/index';
+import { Colors, Globals, Mixins } from '@styles/index';
 import { Gradients } from '@typeDefs/index';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { moderateVerticalScale } from 'react-native-size-matters';
+import { moderateVerticalScale, verticalScale } from 'react-native-size-matters';
 
 type Props = NavigationScreenProps<'Saved'>;
+
+const backdropShown = Mixins.backdropHeight() - Globals.HEADER_TRANSLATE_Y;
+
+const SavedScreen: React.FC<Props> = () => {
+  const backdropPosition =
+    backdropShown - Globals.HEADER_HEIGHT_WITH_STATUS_BAR - verticalScale(15);
+  return (
+    <>
+      <Layout gradient gradientColors={['white', 'white']} backdropPosition={backdropPosition}>
+        <Header
+          title={{ text: 'Saved Colors', location: 'above', color: Colors.PINK }}
+          styles={{ justifyContent: 'center' }}
+        />
+        <View style={styles.container}>
+          <TabView
+            tabs={[
+              { name: 'Gradients', component: <GradientList gradients={gradients} /> },
+              {
+                name: 'Colors',
+                component: <ColorList items={colors} icon flatList />,
+              },
+            ]}
+            styles={{ marginTop: moderateVerticalScale(20, -3) }}
+          />
+        </View>
+      </Layout>
+    </>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+  },
+});
+
+export default React.memo(SavedScreen);
 
 const colors = [
   { color: '#3C233C', name: 'Magenta' },
@@ -24,48 +61,3 @@ const colors = [
 const gradients: Gradients = [
   { name: 'Architecture', description: 'Somber, serious, and mild', likes: 112, colors },
 ];
-
-const SavedScreen: React.FC<Props> = () => {
-  return (
-    <>
-      <Layout
-        gradient
-        gradientColors={['white', 'white']}
-        backdropPosition={Constants.DEVICE_HEIGHT * 0.2}
-      >
-        <View style={styles.container}>
-          <Header
-            title={{ text: 'Saved Colors', location: 'above', color: Colors.PINK }}
-            styles={{ justifyContent: 'center' }}
-          />
-          <View style={styles.cover}>
-            <TabView
-              tabs={[
-                { name: 'Gradients', component: <GradientList gradients={gradients} /> },
-                {
-                  name: 'Colors',
-                  component: <ColorList items={colors} icon flatList />,
-                },
-              ]}
-              styles={{ marginTop: moderateVerticalScale(20, -3) }}
-            />
-          </View>
-        </View>
-      </Layout>
-    </>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  cover: {
-    flex: 1,
-    width: Constants.DEVICE_WIDTH,
-    alignItems: 'center',
-  },
-});
-
-export default React.memo(SavedScreen);

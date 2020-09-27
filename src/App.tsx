@@ -4,6 +4,7 @@ import { registerRootComponent, AppLoading } from 'expo';
 import * as Font from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -13,10 +14,12 @@ const App: React.FC = () => {
   }
 
   return (
-    <FirebaseProvider>
-      <StatusBar style="dark" />
-      <Navigation />
-    </FirebaseProvider>
+    <SafeAreaProvider>
+      <FirebaseProvider>
+        <StatusBar style="dark" />
+        <Navigation />
+      </FirebaseProvider>
+    </SafeAreaProvider>
   );
 };
 

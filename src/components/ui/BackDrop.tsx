@@ -1,5 +1,5 @@
 import * as Constants from '@constants/index';
-import { Colors, Globals } from '@styles/index';
+import { Colors, Globals, Mixins } from '@styles/index';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
@@ -7,6 +7,8 @@ import { View, StyleSheet } from 'react-native';
 interface Props {
   colors?: string[];
   top?: number;
+  borderRadius?: number;
+  height?: number | string;
 }
 
 const BackDrop: React.FC<Props> = (props) => {
@@ -15,9 +17,14 @@ const BackDrop: React.FC<Props> = (props) => {
       <LinearGradient
         style={{
           ...styles.backDrop,
+          width: props.height || Mixins.backdropHeight(),
+          height: props.height || Mixins.backdropHeight(),
+          borderRadius:
+            props.borderRadius === 0
+              ? props.borderRadius
+              : props.borderRadius || Mixins.backdropHeight() / 2,
           transform: [
-            { scaleX: 1.5 },
-            { translateY: props.top || Globals.HEADER_TRANSLATE_Y * -1 },
+            { translateY: props.top || -Globals.HEADER_TRANSLATE_Y },
             { rotate: '-90deg' },
           ],
         }}
@@ -30,9 +37,6 @@ const BackDrop: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
   backDrop: {
-    width: Constants.DEVICE_WIDTH,
-    height: Constants.DEVICE_WIDTH,
-    borderRadius: Constants.DEVICE_WIDTH / 2,
     position: 'absolute',
     zIndex: 0,
     overflow: 'hidden',

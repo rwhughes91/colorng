@@ -1,8 +1,9 @@
 import BackDrop from '@components/ui/BackDrop';
-import { HeaderHeightContext } from '@react-navigation/stack';
+import { useHeaderHeight } from '@react-navigation/stack';
 import { Colors } from '@styles/index';
-import React, { useContext } from 'react';
-import { View, StyleSheet, SafeAreaView, Platform, StatusBar } from 'react-native';
+import Constants from 'expo-constants';
+import React from 'react';
+import { View, StyleSheet, Platform } from 'react-native';
 
 interface Props {
   whiteBackground?: boolean;
@@ -10,28 +11,40 @@ interface Props {
   gradient?: boolean;
   gradientColors?: string[];
   backdropPosition?: number;
+  borderRadius?: number;
+  height?: string | number;
   children: React.ReactNode;
 }
 
 const Layout: React.FC<Props> = (props) => {
-  const headerHeight = useContext(HeaderHeightContext);
+  const headerHeight = useHeaderHeight();
   const layoutStyles = { ...styles.layout };
   if (props.whiteBackground) {
     layoutStyles.backgroundColor = 'white';
   }
+
   return (
     <View style={layoutStyles}>
-      {props.gradient && <BackDrop colors={props.gradientColors} top={props.backdropPosition} />}
-      <SafeAreaView
+      {props.gradient && (
+        <BackDrop
+          colors={props.gradientColors}
+          top={props.backdropPosition}
+          borderRadius={props.borderRadius}
+          height={props.height}
+        />
+      )}
+      <View
         style={{
           ...styles.container,
-          paddingTop: !props.header && Platform.OS === 'android' ? StatusBar.currentHeight : 0,
-          marginTop: props.header && headerHeight ? headerHeight / 1.5 : 0,
-          borderColor: 'red',
+          paddingTop: props.header
+            ? headerHeight
+            : Platform.OS === 'android'
+            ? Constants.statusBarHeight * 3
+            : Constants.statusBarHeight * 2,
         }}
       >
         {props.children}
-      </SafeAreaView>
+      </View>
     </View>
   );
 };

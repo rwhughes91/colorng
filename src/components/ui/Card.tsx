@@ -7,36 +7,41 @@ import { View, StyleSheet, ViewStyle, StyleProp } from 'react-native';
 import { moderateVerticalScale } from 'react-native-size-matters';
 
 interface Props {
-  header: string;
   body: React.ReactNode;
-  description: string;
-  navigation: Navigation;
+  header: string | null;
+  description: string | null;
+  navigation: Navigation | null;
   buttonText?: string;
+  styles?: StyleProp<ViewStyle>;
   bodyStyles?: StyleProp<ViewStyle>;
   noBorder?: boolean;
 }
 
 const Card: React.FC<Props> = (props) => {
   return (
-    <View style={styles.card}>
-      <View style={styles.textContainer}>
-        <Text color={Colors.PINK} styles={styles.textStyles} size={Typography.FONT_SIZE_18}>
-          {props.header}
-        </Text>
-        <Text color={Colors.GRAY}>{props.description}</Text>
-      </View>
+    <View style={[styles.card, props.styles]}>
+      {props.header && props.description && (
+        <View style={styles.textContainer}>
+          <Text color={Colors.PINK} styles={styles.textStyles} size={Typography.FONT_SIZE_18}>
+            {props.header}
+          </Text>
+          <Text color={Colors.GRAY}>{props.description}</Text>
+        </View>
+      )}
       <View style={[styles.bodyContainer, props.bodyStyles]}>{props.body}</View>
-      <View
-        style={[
-          styles.buttonContainer,
-          {
-            borderTopColor: Colors.LIGHT_GRAY,
-            borderTopWidth: props.noBorder ? 0 : 1,
-          },
-        ]}
-      >
-        <CardButton navigation={props.navigation}>{props.buttonText || 'More'}</CardButton>
-      </View>
+      {props.navigation && (
+        <View
+          style={[
+            styles.buttonContainer,
+            {
+              borderTopColor: Colors.LIGHT_GRAY,
+              borderTopWidth: props.noBorder ? 0 : 1,
+            },
+          ]}
+        >
+          <CardButton navigation={props.navigation}>{props.buttonText || 'More'}</CardButton>
+        </View>
+      )}
     </View>
   );
 };

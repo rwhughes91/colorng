@@ -1,9 +1,10 @@
 import SearchInput from '@components/ui/inputs/SearchInput';
 import HeaderText from '@components/ui/text/HeaderText';
-import * as Constants from '@constants/index';
-import { Globals } from '@styles/index';
+import Text from '@components/ui/text/Text';
 import React from 'react';
-import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
+import { View, StyleProp, ViewStyle } from 'react-native';
+
+import styles from './HeaderStyles';
 
 interface Props {
   title: { text: string; location: 'above' | 'below'; color?: string };
@@ -13,16 +14,18 @@ interface Props {
     iconColor?: string;
     backgroundColors?: string[];
   };
+  description?: string;
   showInput?: boolean;
   styles?: StyleProp<ViewStyle>;
 }
 
 const Header: React.FC<Props> = (props) => {
-  const headerText = (
+  const headerText = [
     <HeaderText key="header" color={props.title.color}>
       {props.title.text}
-    </HeaderText>
-  );
+    </HeaderText>,
+    props.description && <Text key="description">{props.description}</Text>,
+  ];
   const searchInput = <SearchInput key="searchInput" {...props.showInputColors} />;
   const items = [];
   if (props.showInput) {
@@ -36,16 +39,5 @@ const Header: React.FC<Props> = (props) => {
   }
   return <View style={[styles.header, props.styles]}>{items}</View>;
 };
-
-const styles = StyleSheet.create({
-  header: {
-    width: Globals.CONTENT_WIDTH,
-    maxWidth: Globals.MAX_CONTENT_WIDTH,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    height: Globals.HEADER_HEIGHT,
-    marginVertical: Globals.HEADER_MARGINS,
-  },
-});
 
 export default React.memo(Header);

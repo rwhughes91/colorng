@@ -11,6 +11,7 @@ import { moderateVerticalScale } from 'react-native-size-matters';
 interface Props extends Gradient {
   iconSize: number;
   styles?: StyleProp<ViewStyle>;
+  topBorder?: boolean;
 }
 
 const GradientListItem: React.FC<Props> = (props) => {
@@ -29,7 +30,11 @@ const GradientListItem: React.FC<Props> = (props) => {
   }, [navigateToDetail]);
 
   return (
-    <TouchableOpacity style={[styles.gradientList]} activeOpacity={0.9} onPress={onClickHandler}>
+    <TouchableOpacity
+      style={[styles.gradientList, { borderTopWidth: props.topBorder ? 1 : 0 }]}
+      activeOpacity={0.9}
+      onPress={onClickHandler}
+    >
       <View style={[styles.textContainer, { width: Globals.COLOR_SIZE * 5 }]}>
         <Text color={Colors.BLUE}>{props.name}</Text>
         <Text color={Colors.PINK}>{`${props.likes} likes`}</Text>
@@ -72,7 +77,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     borderColor: Colors.LIGHT_GRAY,
-    borderTopWidth: 1,
     borderBottomWidth: 1,
     paddingBottom: moderateVerticalScale(14),
     paddingTop: moderateVerticalScale(6),

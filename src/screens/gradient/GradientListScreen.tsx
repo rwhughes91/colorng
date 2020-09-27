@@ -1,5 +1,5 @@
 import GradientCard from '@components/cards/GradientCard';
-import Header from '@components/layouts/Header';
+import Header from '@components/layouts/Header/Header';
 import Layout from '@components/layouts/Layout';
 import Carousel from '@components/ui/Carousel';
 import { NavigationScreenProps } from '@navigations/GradientNavigator';

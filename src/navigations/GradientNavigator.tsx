@@ -6,13 +6,15 @@ import GradientListScreen from '@screens/gradient/GradientListScreen';
 import GradientSearchScreen from '@screens/gradient/GradientSearchScreen';
 import HomeScreen from '@screens/gradient/HomeScreen';
 import { Spacing, Colors } from '@styles/index';
+import { Gradient } from '@typeDefs/index';
 import React from 'react';
 import { Platform } from 'react-native';
 
-type Params = 'Home' | 'List' | 'Search' | 'Detail';
-
 type GradientStackParamList = {
-  [param in Params]: undefined;
+  Home: undefined;
+  List: undefined;
+  Search: undefined;
+  Detail: Gradient;
 };
 
 export interface NavigationScreenProps<T extends keyof GradientStackParamList> {

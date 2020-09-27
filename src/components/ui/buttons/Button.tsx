@@ -1,21 +1,28 @@
-import { Typography, Colors, Globals } from '@styles/index';
+import HeaderText from '@components/ui/text/HeaderText';
+import { Colors, Globals, Typography } from '@styles/index';
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { TouchableOpacity, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 
 interface Props {
+  children: string;
   textColor?: string;
   textSize?: number;
   buttonColor?: string;
+  styles?: StyleProp<ViewStyle>;
 }
 
 const CardButton: React.FC<Props> = (props) => {
-  const fontSize = props.textSize || Typography.FONT_SIZE_16;
-  const color = props.textColor || 'white';
   return (
     <TouchableOpacity
-      style={{ ...styles.container, backgroundColor: props.buttonColor || Colors.PINK }}
+      activeOpacity={0.85}
+      style={[
+        { ...styles.container, backgroundColor: props.buttonColor || Colors.PINK },
+        props.styles,
+      ]}
     >
-      <Text style={{ ...styles.text, fontSize, color }}>{props.children}</Text>
+      <HeaderText size={props.textSize || Typography.FONT_SIZE_16} color={props.textColor}>
+        {props.children}
+      </HeaderText>
     </TouchableOpacity>
   );
 };
@@ -27,9 +34,6 @@ const styles = StyleSheet.create({
     borderRadius: Globals.BORDER_RADIUS,
     height: Globals.COMPONENT_HEIGHT,
     width: Globals.COMPONENT_WIDTH,
-  },
-  text: {
-    ...Typography.FONT_REGULAR,
   },
 });
 

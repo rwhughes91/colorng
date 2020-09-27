@@ -68,3 +68,13 @@ export function roundCornersRadius(type: 'first' | 'last', borderRadius: number)
     borderBottomLeftRadius: borderRadius,
   };
 }
+
+export function backdropHeight(height = Constants.DEVICE_HEIGHT) {
+  const adjustment = 500;
+  const baseHeight = 1000;
+  const ratio = height / 1000;
+  if (ratio < 1) {
+    return baseHeight;
+  }
+  return Math.floor(height / adjustment - 1) * adjustment + baseHeight;
+}

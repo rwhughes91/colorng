@@ -53,8 +53,8 @@ const Carousel: React.FC<Props> = (props) => {
     );
   }
 
-  return (
-    <View style={styles.container}>
+  const output = (
+    <>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -75,6 +75,16 @@ const Carousel: React.FC<Props> = (props) => {
         ))}
       </ScrollView>
       <View style={styles.bullets}>{bullets}</View>
+    </>
+  );
+
+  return (
+    <View style={styles.container}>
+      {Constants.DEVICE_HEIGHT <= 350 ? (
+        <ScrollView contentContainerStyle={{ flex: 1 }}>{output}</ScrollView>
+      ) : (
+        output
+      )}
     </View>
   );
 };
@@ -84,6 +94,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: Constants.DEVICE_WIDTH,
     maxHeight: Mixins.sizeResponse(500, 600),
+    minHeight: 350,
   },
   carousel: {
     flexDirection: 'row',

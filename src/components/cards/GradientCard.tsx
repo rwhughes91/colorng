@@ -10,7 +10,7 @@ const GradientCard: React.FC<Props> = (props) => {
     <Card
       header="Architecture"
       description="Somber, serious, and mild"
-      body={<ColorList items={props.colors} fill />}
+      body={<ColorList items={props.colors} fill containerStyles={{ marginTop: 10 }} />}
       noBorder
       navigation={{ name: 'Detail', params: props }}
     />
