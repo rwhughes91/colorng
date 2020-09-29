@@ -2,36 +2,48 @@ import * as Constants from '@constants/index';
 import { Colors, Globals, Mixins } from '@styles/index';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Animated, StyleProp, ViewStyle } from 'react-native';
 
 interface Props {
   colors?: string[];
   top?: number;
   borderRadius?: number;
+  cover?: boolean;
   height?: number | string;
+  animated?: boolean;
+  animatedStyles?: Animated.WithAnimatedValue<StyleProp<ViewStyle>>;
 }
 
 const BackDrop: React.FC<Props> = (props) => {
-  return (
+  const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
+
+  const style = {
+    ...styles.backDrop,
+    width: props.height || Mixins.backdropHeight(),
+    height: props.height || Mixins.backdropHeight(),
+    borderRadius:
+      props.borderRadius === 0
+        ? props.borderRadius
+        : props.borderRadius || Mixins.backdropHeight() / 2,
+    transform: [
+      { translateY: props.top !== undefined ? props.top : -Globals.HEADER_TRANSLATE_Y },
+      { rotate: '-90deg' },
+    ],
+  };
+
+  return !props.animated ? (
     <>
       <LinearGradient
-        style={{
-          ...styles.backDrop,
-          width: props.height || Mixins.backdropHeight(),
-          height: props.height || Mixins.backdropHeight(),
-          borderRadius:
-            props.borderRadius === 0
-              ? props.borderRadius
-              : props.borderRadius || Mixins.backdropHeight() / 2,
-          transform: [
-            { translateY: props.top || -Globals.HEADER_TRANSLATE_Y },
-            { rotate: '-90deg' },
-          ],
-        }}
+        style={style}
         colors={props.colors ? props.colors : [Colors.ORANGE, Colors.PINK]}
       />
-      {props.top && <View style={styles.cover} />}
+      {props.cover !== undefined && props.top !== undefined ? <View style={styles.cover} /> : null}
     </>
+  ) : (
+    <AnimatedLinearGradient
+      style={[style, props.animatedStyles]}
+      colors={props.colors ? props.colors : [Colors.ORANGE, Colors.PINK]}
+    />
   );
 };
 

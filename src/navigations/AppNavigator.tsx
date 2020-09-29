@@ -2,14 +2,16 @@ import CreateIcon from '@components/icons/CreateIcon';
 import ExploreIcon from '@components/icons/ExploreIcon';
 import HeartIcon from '@components/icons/HeartIcon';
 import ProfileIcon from '@components/icons/ProfileIcon';
+import useFirebase from '@hooks/useFirebase';
 import { createBottomTabNavigator, BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, RouteProp } from '@react-navigation/native';
-import ProfileScreen from '@screens/ProfileScreen';
 import { Colors } from '@styles/index';
 import React from 'react';
 
+import AuthNavigator from './AuthNavigator';
 import CreateNavigator from './CreateNavigator';
 import GradientNavigator from './GradientNavigator';
+import ProfileNavigator from './ProfileNavigator';
 import SavedNavigator from './SavedNavigator';
 
 type Params = 'Home' | 'Saved' | 'Create' | 'Profile';
@@ -25,7 +27,9 @@ export interface NavigationScreenProps<T extends keyof AppTabParamList> {
 
 const Tab = createBottomTabNavigator<AppTabParamList>();
 
-const Navigation = () => {
+const Navigation: React.FC = () => {
+  const firebase = useFirebase();
+
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -64,7 +68,7 @@ const Navigation = () => {
         />
         <Tab.Screen
           name="Profile"
-          component={ProfileScreen}
+          component={firebase && firebase.user ? ProfileNavigator : AuthNavigator}
           options={{
             tabBarIcon: ({ focused, size, color }) => (
               <ProfileIcon focused={focused} size={size} color={color} />

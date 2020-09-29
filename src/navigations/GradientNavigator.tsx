@@ -1,6 +1,7 @@
 import BackIcon from '@components/icons/BackIcon';
 import { RouteProp } from '@react-navigation/native';
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
+import TestScreen from '@screens/TestScreen';
 import GradientDetailScreen from '@screens/gradient/GradientDetailScreen';
 import GradientListScreen from '@screens/gradient/GradientListScreen';
 import GradientSearchScreen from '@screens/gradient/GradientSearchScreen';
@@ -51,6 +52,7 @@ const GradientNavigator = () => {
         component={GradientDetailScreen}
         options={{ headerTintColor: 'white' }}
       />
+      <Stack.Screen name="Test" component={TestScreen} options={{ headerTintColor: 'white' }} />
     </Stack.Navigator>
   );
 };

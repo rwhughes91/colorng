@@ -10,6 +10,7 @@ import GradientList from './GradientList';
 interface Props {
   colors: ColorsType;
   gradients: Gradients;
+  scrollEnabled?: boolean;
 }
 
 const GradientDetailScrollView: React.FC<Props> = (props) => {
@@ -26,6 +27,7 @@ const GradientDetailScrollView: React.FC<Props> = (props) => {
       gradients={props.gradients}
       listHeaderComponent={header}
       styles={{ paddingTop: 3 }}
+      scrollEnabled={props.scrollEnabled}
     />
   );
 };

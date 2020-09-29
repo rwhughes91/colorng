@@ -8,7 +8,7 @@ type Props = NavigationScreenProps<'Create'>;
 
 const CreateScreen: React.FC<Props> = (props) => {
   return (
-    <Layout gradient>
+    <Layout gradient header>
       <Header title={{ text: 'Create a Gradient', location: 'below' }} showInput />
       <CreateCard navigation={props.navigation} route={props.route} />
     </Layout>

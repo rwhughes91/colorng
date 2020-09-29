@@ -11,7 +11,7 @@ import { ScrollView, View, StyleSheet } from 'react-native';
 
 type Props = NavigationScreenProps<'Image'>;
 
-const CreateFromImageScreen: React.FC<Props> = () => {
+const CreateFromInputScreen: React.FC<Props> = () => {
   const checkMarkIconContainer = (
     <View style={styles.checkMarkIcon}>
       <CheckMarkIcon size={24} color="green" />
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default React.memo(CreateFromImageScreen);
+export default React.memo(CreateFromInputScreen);
 
 const colors = [
   { color: '#3C233C', name: 'Magenta' },

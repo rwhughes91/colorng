@@ -20,4 +20,5 @@ export default StyleSheet.create({
   searchIconContainer: {
     marginHorizontal: moderateScale(9, 0.2),
   },
+  invalid: {},
 });

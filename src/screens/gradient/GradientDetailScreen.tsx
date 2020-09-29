@@ -65,3 +65,9 @@ const gradients = [
   { name: 'Architecture', description: 'Somber, serious, and mild', likes: 112, colors },
   { name: 'Architecture', description: 'Somber, serious, and mild', likes: 112, colors },
 ];
+
+{
+  /* <Main small>
+<GradientDetailScrollView colors={colors} gradients={gradients} />
+</Main> */
+}

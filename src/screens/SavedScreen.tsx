@@ -19,7 +19,12 @@ const SavedScreen: React.FC<Props> = () => {
     backdropShown - Globals.HEADER_HEIGHT_WITH_STATUS_BAR - verticalScale(15);
   return (
     <>
-      <Layout gradient gradientColors={['white', 'white']} backdropPosition={backdropPosition}>
+      <Layout
+        gradient
+        gradientColors={['white', 'white']}
+        backdropPosition={backdropPosition}
+        cover
+      >
         <Header
           title={{ text: 'Saved Colors', location: 'above', color: Colors.PINK }}
           styles={{ justifyContent: 'center' }}

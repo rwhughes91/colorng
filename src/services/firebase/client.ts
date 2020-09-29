@@ -6,14 +6,30 @@ import { firebaseConfig } from '../../../environment';
 
 export default class Firebase {
   static auth: firebase.auth.Auth;
-  static firestore: firebase.firestore.Firestore;
+  static db: firebase.firestore.Firestore;
 
   static init() {
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
-      Firebase.auth = firebase.auth();
-      Firebase.firestore = firebase.firestore();
+      this.auth = firebase.auth();
+      this.db = firebase.firestore();
     }
-    return { auth: Firebase.auth, firestore: Firebase.firestore };
+    return this;
+  }
+
+  static logout() {
+    return this.auth.signOut();
+  }
+
+  static login(email: string, password: string) {
+    return this.auth.signInWithEmailAndPassword(email, password);
+  }
+
+  static signUp(email: string, password: string) {
+    return this.auth.createUserWithEmailAndPassword(email, password);
+  }
+
+  static sendResetToken(email: string) {
+    return this.auth.sendPasswordResetEmail(email);
   }
 }
