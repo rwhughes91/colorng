@@ -9,12 +9,17 @@ interface Props {
   focused: boolean;
   styles?: StyleProp<ViewStyle>;
   icon?: 'heart' | 'plus';
+  onPress: () => void;
 }
 
 const LikeButton: React.FC<Props> = (props) => {
   const icon = props.icon || 'heart';
   return (
-    <TouchableOpacity style={[styles.button, props.styles]} activeOpacity={1}>
+    <TouchableOpacity
+      style={[styles.button, props.styles]}
+      activeOpacity={1}
+      onPress={props.onPress}
+    >
       {icon === 'heart' ? (
         <HeartIcon focused={props.focused} size={Globals.BODY_ICON - 5} color={Colors.PINK} />
       ) : (

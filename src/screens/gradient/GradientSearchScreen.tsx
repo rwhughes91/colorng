@@ -55,6 +55,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+    width: Globals.CONTENT_WIDTH,
+    maxWidth: Globals.MAX_CONTENT_WIDTH,
   },
   buttonWrapper: {
     top: -Globals.HEADER_MARGINS,

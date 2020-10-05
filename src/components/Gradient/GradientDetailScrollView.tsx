@@ -17,18 +17,22 @@ const GradientDetailScrollView: React.FC<Props> = (props) => {
   const header = (
     <View>
       <ColorListLayout colors={props.colors} title="Colors" styles={{ marginTop: 0 }} icon />
-      <HeaderLabelText styles={{ marginTop: moderateVerticalScale(15) }}>
-        Other Gradients by This User
-      </HeaderLabelText>
+      {props.gradients.length > 0 && (
+        <HeaderLabelText styles={{ marginTop: moderateVerticalScale(15) }}>
+          Other Gradients by This User
+        </HeaderLabelText>
+      )}
     </View>
   );
-  return (
+  return props.gradients.length > 0 ? (
     <GradientList
       gradients={props.gradients}
       listHeaderComponent={header}
       styles={{ paddingTop: 3 }}
       scrollEnabled={props.scrollEnabled}
     />
+  ) : (
+    header
   );
 };
 

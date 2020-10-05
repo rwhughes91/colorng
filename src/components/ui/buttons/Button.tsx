@@ -1,7 +1,13 @@
 import HeaderText from '@components/ui/text/HeaderText';
 import { Colors, Globals, Typography } from '@styles/index';
 import React from 'react';
-import { TouchableOpacity, StyleSheet, StyleProp, ViewStyle } from 'react-native';
+import {
+  TouchableOpacity,
+  StyleSheet,
+  StyleProp,
+  ViewStyle,
+  ActivityIndicator,
+} from 'react-native';
 
 interface Props {
   children: string;
@@ -9,20 +15,27 @@ interface Props {
   textSize?: number;
   buttonColor?: string;
   styles?: StyleProp<ViewStyle>;
+  onPress: () => void;
+  loading?: boolean;
 }
 
 const CardButton: React.FC<Props> = (props) => {
   return (
     <TouchableOpacity
-      activeOpacity={0.85}
+      activeOpacity={Globals.ACTIVE_OPACITY}
       style={[
         { ...styles.container, backgroundColor: props.buttonColor || Colors.PINK },
         props.styles,
       ]}
+      onPress={props.onPress}
     >
-      <HeaderText size={props.textSize || Typography.FONT_SIZE_16} color={props.textColor}>
-        {props.children}
-      </HeaderText>
+      {!props.loading ? (
+        <HeaderText size={props.textSize || Typography.FONT_SIZE_16} color={props.textColor}>
+          {props.children}
+        </HeaderText>
+      ) : (
+        <ActivityIndicator animating size="small" color="white" />
+      )}
     </TouchableOpacity>
   );
 };

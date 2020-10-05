@@ -4,6 +4,8 @@ import React from 'react';
 import { View, StyleProp, ViewStyle, StyleSheet, TextStyle, FlatList } from 'react-native';
 
 import ColorItem from './ColorItem';
+import EmptyColorList from './EmptyColorList';
+
 interface Props {
   items: ColorsType;
   fill?: boolean;
@@ -23,12 +25,6 @@ const ColorList: React.FC<Props> = (props) => {
   const containerStyles = { ...styles.colorList, flex: props.fill ? 1 : 0 };
   const renderItem: (x: any) => any = ({ item, index }) => {
     const colorStyles = {};
-    // if (index === 0) {
-    //   colorStyles = Mixins.roundCornersRadius('first', 3);
-    // }
-    // if (index === props.items.length - 1) {
-    //   colorStyles = Mixins.roundCornersRadius('last', 3);
-    // }
     return (
       <ColorItem
         {...item}
@@ -44,6 +40,11 @@ const ColorList: React.FC<Props> = (props) => {
       />
     );
   };
+
+  if (props.items.length === 0) {
+    return <EmptyColorList />;
+  }
+
   return props.flatList ? (
     <FlatList
       data={props.items}

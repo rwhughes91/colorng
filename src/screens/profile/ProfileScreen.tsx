@@ -4,8 +4,9 @@ import UserIcon from '@components/icons/UserIcon';
 import Layout from '@components/layouts/Layout';
 import LineItem from '@components/ui/LineItem';
 import HeaderText from '@components/ui/text/HeaderText';
+import Firebase from '@services/firebase/client';
 import { Globals, Colors, Typography, Spacing } from '@styles/index';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { moderateVerticalScale } from 'react-native-size-matters';
 
@@ -13,6 +14,10 @@ const SIZE = 20;
 const COLOR = Colors.GRAY;
 
 const ProfileScreen: React.FC = () => {
+  const onLogoutHandler = useCallback(() => {
+    Firebase.logout();
+  }, []);
+
   return (
     <Layout>
       <View style={styles.container}>
@@ -52,7 +57,12 @@ const ProfileScreen: React.FC = () => {
             icon={<MessageIcon size={SIZE} color={COLOR} />}
           />
         </View>
-        <LineItem text="Logout" color={Colors.BLUE} size={Typography.FONT_SIZE_18} />
+        <LineItem
+          text="Logout"
+          color={Colors.BLUE}
+          size={Typography.FONT_SIZE_18}
+          onPress={onLogoutHandler}
+        />
       </View>
     </Layout>
   );

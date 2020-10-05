@@ -9,7 +9,7 @@ import { moderateVerticalScale } from 'react-native-size-matters';
 interface Props {
   body: React.ReactNode;
   header: string | null;
-  description: string | null;
+  description?: string | null;
   navigation: Navigation | null;
   buttonText?: string;
   styles?: StyleProp<ViewStyle>;
@@ -20,12 +20,12 @@ interface Props {
 const Card: React.FC<Props> = (props) => {
   return (
     <View style={[styles.card, props.styles]}>
-      {props.header && props.description && (
+      {!!props.header && (
         <View style={styles.textContainer}>
           <Text color={Colors.PINK} styles={styles.textStyles} size={Typography.FONT_SIZE_18}>
             {props.header}
           </Text>
-          <Text color={Colors.GRAY}>{props.description}</Text>
+          {!!props.description && <Text color={Colors.GRAY}>{props.description}</Text>}
         </View>
       )}
       <View style={[styles.bodyContainer, props.bodyStyles]}>{props.body}</View>

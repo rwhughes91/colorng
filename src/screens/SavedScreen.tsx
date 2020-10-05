@@ -1,22 +1,52 @@
 import ColorList from '@components/Color/ColorList';
 import GradientList from '@components/Gradient/GradientList';
+import LoginIcon from '@components/icons/LoginIcon';
 import Header from '@components/layouts/Header/Header';
 import Layout from '@components/layouts/Layout';
 import TabView from '@components/ui/TabView';
-import { NavigationScreenProps } from '@navigations/AppNavigator';
+import useFirebase from '@hooks/useFirebase';
+import { NavigationScreenProps } from '@navigations/SavedNavigator';
 import { Colors, Globals, Mixins } from '@styles/index';
-import { Gradients } from '@typeDefs/index';
-import React from 'react';
+import { Gradients, Colors as ColorsType } from '@typeDefs/index';
+import React, { useLayoutEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { moderateVerticalScale, verticalScale } from 'react-native-size-matters';
+import { useSelector } from 'react-redux';
 
-type Props = NavigationScreenProps<'Saved'>;
+type Props = NavigationScreenProps<'Home'>;
 
 const backdropShown = Mixins.backdropHeight() - Globals.HEADER_TRANSLATE_Y;
+const backdropPosition = backdropShown - Globals.HEADER_HEIGHT_WITH_STATUS_BAR - verticalScale(15);
 
-const SavedScreen: React.FC<Props> = () => {
-  const backdropPosition =
-    backdropShown - Globals.HEADER_HEIGHT_WITH_STATUS_BAR - verticalScale(15);
+const SavedScreen: React.FC<Props> = (props) => {
+  const firebase = useFirebase();
+  const savedGradients = useSelector<{ gradient: { userGradients: Gradients } }, Gradients>(
+    (state) => state.gradient.userGradients
+  );
+  const savedColors = useSelector<{ gradient: { userColors: ColorsType } }, ColorsType>(
+    (state) => state.gradient.userColors
+  );
+
+  useLayoutEffect(() => {
+    if (!firebase?.user) {
+      props.navigation.setOptions({
+        headerRight: () => (
+          <LoginIcon
+            color={Colors.PINK}
+            size={24}
+            onPress={() => props.navigation.navigate('Profile')}
+          />
+        ),
+        headerRightContainerStyle: { marginRight: 15 },
+      });
+    } else {
+      props.navigation.setOptions({
+        headerRight: undefined,
+        headerRightContainerStyle: undefined,
+      });
+    }
+  }, [firebase?.user, props.navigation]);
+
   return (
     <>
       <Layout
@@ -32,10 +62,10 @@ const SavedScreen: React.FC<Props> = () => {
         <View style={styles.container}>
           <TabView
             tabs={[
-              { name: 'Gradients', component: <GradientList gradients={gradients} /> },
+              { name: 'Gradients', component: <GradientList gradients={savedGradients} /> },
               {
                 name: 'Colors',
-                component: <ColorList items={colors} icon flatList />,
+                component: <ColorList items={savedColors} icon flatList />,
               },
             ]}
             styles={{ marginTop: moderateVerticalScale(20, -3) }}
@@ -54,15 +84,3 @@ const styles = StyleSheet.create({
 });
 
 export default React.memo(SavedScreen);
-
-const colors = [
-  { color: '#3C233C', name: 'Magenta' },
-  { color: '#463B4D', name: 'Dark Gray Violet' },
-  { color: '#688188', name: 'Gray Cyan' },
-  { color: '#CCB58D', name: 'Beige' },
-  { color: '#DFCC73', name: 'Gold' },
-];
-
-const gradients: Gradients = [
-  { name: 'Architecture', description: 'Somber, serious, and mild', likes: 112, colors },
-];

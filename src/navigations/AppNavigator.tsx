@@ -5,8 +5,10 @@ import ProfileIcon from '@components/icons/ProfileIcon';
 import useFirebase from '@hooks/useFirebase';
 import { createBottomTabNavigator, BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, RouteProp } from '@react-navigation/native';
+import * as actions from '@store/actions/index';
 import { Colors } from '@styles/index';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 import AuthNavigator from './AuthNavigator';
 import CreateNavigator from './CreateNavigator';
@@ -28,7 +30,13 @@ export interface NavigationScreenProps<T extends keyof AppTabParamList> {
 const Tab = createBottomTabNavigator<AppTabParamList>();
 
 const Navigation: React.FC = () => {
+  const dispatch = useDispatch();
   const firebase = useFirebase();
+
+  useEffect(() => {
+    dispatch(actions.fetchTodaysGradients());
+    dispatch(actions.fetchUsersGradientsAndColors());
+  }, [dispatch]);
 
   return (
     <NavigationContainer>
@@ -57,18 +65,20 @@ const Navigation: React.FC = () => {
             ),
           }}
         />
-        <Tab.Screen
-          name="Create"
-          component={CreateNavigator}
-          options={{
-            tabBarIcon: ({ focused, size, color }) => (
-              <CreateIcon focused={focused} size={size} color={color} />
-            ),
-          }}
-        />
+        {firebase && firebase.user && (
+          <Tab.Screen
+            name="Create"
+            component={CreateNavigator}
+            options={{
+              tabBarIcon: ({ focused, size, color }) => (
+                <CreateIcon focused={focused} size={size} color={color} />
+              ),
+            }}
+          />
+        )}
         <Tab.Screen
           name="Profile"
-          component={firebase && firebase.user ? ProfileNavigator : AuthNavigator}
+          component={firebase?.user ? ProfileNavigator : AuthNavigator}
           options={{
             tabBarIcon: ({ focused, size, color }) => (
               <ProfileIcon focused={focused} size={size} color={color} />

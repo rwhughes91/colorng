@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { Typography, Colors } from '@styles/index';
+import { Typography, Colors, Globals } from '@styles/index';
 import { Navigation } from '@typeDefs/index';
 import React, { useCallback } from 'react';
 import { TouchableOpacity, Text, StyleSheet, StyleProp, ViewStyle } from 'react-native';
@@ -23,7 +23,11 @@ const CardButton: React.FC<Props> = (props) => {
   }, [navigation, props.navigation]);
 
   return (
-    <TouchableOpacity style={[styles.container, props.styles]} onPress={navigate}>
+    <TouchableOpacity
+      style={[styles.container, props.styles]}
+      onPress={navigate}
+      activeOpacity={Globals.ACTIVE_OPACITY}
+    >
       <Text style={{ ...styles.text, fontSize, color }}>{props.children}</Text>
     </TouchableOpacity>
   );

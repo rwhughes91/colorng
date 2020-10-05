@@ -3,16 +3,15 @@ import CreateGradientHeader from '@components/layouts/Header/CreateGradientHeade
 import Layout from '@components/layouts/Layout';
 import Main from '@components/layouts/Main';
 import Button from '@components/ui/buttons/Button';
-import * as Constants from '@constants/index';
 import { NavigationScreenProps } from '@navigations/CreateNavigator';
 import { Globals } from '@styles/index';
 import React from 'react';
-import { ScrollView, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 type Props = NavigationScreenProps<'Image'>;
 
 const CreateFromImageScreen: React.FC<Props> = () => {
-  let items = (
+  const items = (
     <View style={{ flex: 1, justifyContent: 'flex-end' }}>
       <ColorListLayout colors={colors} title="Colors" icon />
       <View style={styles.buttonContainer}>
@@ -20,16 +19,6 @@ const CreateFromImageScreen: React.FC<Props> = () => {
       </View>
     </View>
   );
-  if (Constants.DEVICE_HEIGHT < 600) {
-    items = (
-      <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'flex-end' }}>
-        <ColorListLayout colors={colors} title="Colors" icon />
-        <View style={styles.buttonContainer}>
-          <Button>Save</Button>
-        </View>
-      </ScrollView>
-    );
-  }
   return (
     <>
       <Layout whiteBackground gradient backdropPosition={-Globals.BACKDROP_TRANSLATE_SMALL}>

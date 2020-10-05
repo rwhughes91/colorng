@@ -7,7 +7,7 @@ import { Spacing } from '@styles/index';
 import React from 'react';
 import { Platform } from 'react-native';
 
-type Params = 'Home' | 'Detail';
+type Params = 'Home' | 'Detail' | 'Profile';
 
 type GradientStackParamList = {
   [param in Params]: undefined;
@@ -31,7 +31,7 @@ const GradientNavigator = () => {
         headerLeftContainerStyle: { paddingLeft: Platform.OS === 'ios' ? Spacing.SCALE_12 : 0 },
       }}
     >
-      <Stack.Screen name="Home" component={SavedScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="Home" component={SavedScreen} />
       <Stack.Screen
         name="Detail"
         component={GradientDetailScreen}

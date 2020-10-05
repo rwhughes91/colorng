@@ -3,9 +3,10 @@ import Form from '@components/ui/Form';
 import HeaderText from '@components/ui/text/HeaderText';
 import useForm from '@hooks/useForm';
 import { NavigationScreenProps } from '@navigations/AuthNavigator';
+import Firebase from '@services/firebase/client';
 import { Globals, Colors } from '@styles/index';
-import React, { useCallback } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { View, StyleSheet, Alert } from 'react-native';
 import { moderateVerticalScale } from 'react-native-size-matters';
 
 type Props = NavigationScreenProps<'Login'>;
@@ -22,6 +23,7 @@ const LoginScreen: React.FC<Props> = () => {
     },
   };
   const [formState, dispatch] = useForm(initialState);
+  const [loading, setLoading] = useState(false);
 
   const onChangeHandler = useCallback(
     (key: string, value: string) => {
@@ -30,6 +32,21 @@ const LoginScreen: React.FC<Props> = () => {
     [dispatch]
   );
 
+  const loginHandler = useCallback(() => {
+    if (!formState.email.value || !formState.password.value) {
+      return Alert.alert('Error', 'Both fields are required');
+    }
+    setLoading(true);
+    Firebase.login(formState.email.value, formState.password.value)
+      .then(() => {
+        setLoading(false);
+      })
+      .catch((error) => {
+        setLoading(false);
+        Alert.alert('Error', error.message);
+      });
+  }, [formState.email.value, formState.password.value]);
+
   return (
     <Layout>
       <View style={styles.container}>
@@ -37,6 +54,8 @@ const LoginScreen: React.FC<Props> = () => {
           <HeaderText color={Colors.PINK}>Login</HeaderText>
         </View>
         <Form
+          loading={loading}
+          onSubmit={loginHandler}
           buttonTitle="Login"
           showSignUpContainer
           formFields={[

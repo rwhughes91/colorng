@@ -22,6 +22,7 @@ const GradientListItem: React.FC<Props> = (props) => {
       likes: props.likes,
       description: props.description,
       colors: props.colors,
+      id: props.id,
     },
   });
 
@@ -37,7 +38,6 @@ const GradientListItem: React.FC<Props> = (props) => {
     >
       <View style={[styles.textContainer, { width: Globals.COLOR_SIZE * 5 }]}>
         <Text color={Colors.BLUE}>{props.name}</Text>
-        <Text color={Colors.PINK}>{`${props.likes} likes`}</Text>
       </View>
       <View style={styles.gradientContainer}>
         <View style={[styles.colorsContainer]}>
@@ -58,7 +58,7 @@ const GradientListItem: React.FC<Props> = (props) => {
             return (
               <Color
                 key={i}
-                color={color.color}
+                color={color.hex}
                 colorStyles={{ position: 'relative', ...additionalStyles }}
               />
             );

@@ -3,9 +3,10 @@ import Form from '@components/ui/Form';
 import HeaderText from '@components/ui/text/HeaderText';
 import useForm from '@hooks/useForm';
 import { NavigationScreenProps } from '@navigations/AuthNavigator';
+import Firebase from '@services/firebase/client';
 import { Globals, Colors } from '@styles/index';
-import React, { useCallback } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { View, StyleSheet, Alert } from 'react-native';
 import { moderateVerticalScale } from 'react-native-size-matters';
 
 type Props = NavigationScreenProps<'Login'>;
@@ -26,6 +27,7 @@ const SignUpScreen: React.FC<Props> = () => {
     },
   };
   const [formState, dispatch] = useForm(initialState);
+  const [loading, setLoading] = useState(false);
 
   const onChangeHandler = useCallback(
     (key: string, value: string) => {
@@ -34,6 +36,28 @@ const SignUpScreen: React.FC<Props> = () => {
     [dispatch]
   );
 
+  const signUpHandler = () => {
+    if (
+      !formState.email.value ||
+      !formState.password.value ||
+      !formState['confirm password'].value
+    ) {
+      return Alert.alert('Error', 'All fields are required');
+    }
+    if (formState.password.value !== formState['confirm password'].value) {
+      return Alert.alert('Error', 'Password fields must match');
+    }
+    setLoading(true);
+    Firebase.signUp(formState.email.value, formState.password.value)
+      .then(() => {
+        setLoading(false);
+      })
+      .catch((error) => {
+        setLoading(false);
+        Alert.alert('Error', error.message);
+      });
+  };
+
   return (
     <Layout>
       <View style={styles.container}>
@@ -41,6 +65,8 @@ const SignUpScreen: React.FC<Props> = () => {
           <HeaderText color={Colors.PINK}>Sign Up</HeaderText>
         </View>
         <Form
+          loading={loading}
+          onSubmit={signUpHandler}
           buttonTitle="Sign Up"
           showSignUpContainer={false}
           formFields={[

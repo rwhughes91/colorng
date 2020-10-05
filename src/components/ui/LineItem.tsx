@@ -10,14 +10,15 @@ interface Props {
   size?: number;
   icon?: React.ReactNode;
   styles?: StyleProp<ViewStyle>;
+  onPress?: () => void;
 }
 
 const LineItem: React.FC<Props> = (props) => {
   return (
     <TouchableHighlight
       underlayColor="rgba(0, 0, 0, .05)"
-      onPress={() => {}}
       style={{ width: '100%', alignItems: 'center' }}
+      onPress={props.onPress}
     >
       <View style={[styles.lineItem, props.styles]}>
         <Text color={props.color || Colors.GRAY} size={props.size}>

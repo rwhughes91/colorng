@@ -3,6 +3,7 @@ import { Gradients, Gradient } from '@typeDefs/index';
 import React, { useCallback } from 'react';
 import { FlatList, ListRenderItem, StyleProp, ViewStyle, Animated } from 'react-native';
 
+import EmptyGradientList from './EmptyGradientList';
 import GradientListItem from './GradientListItem';
 
 interface Props {
@@ -42,6 +43,10 @@ const GradientList: React.FC<Props> = (props) => {
     overScrollMode: props.overScrollMode,
     scrollEventThrottle: props.scrollEventThrottle,
   };
+
+  if (props.gradients.length === 0) {
+    return <EmptyGradientList />;
+  }
 
   return !props.animated ? <FlatList {...config} /> : <Animated.FlatList {...config} />;
 };

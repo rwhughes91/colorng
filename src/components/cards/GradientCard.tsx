@@ -8,8 +8,8 @@ type Props = Gradient;
 const GradientCard: React.FC<Props> = (props) => {
   return (
     <Card
-      header="Architecture"
-      description="Somber, serious, and mild"
+      header={props.name}
+      description={props.description}
       body={<ColorList items={props.colors} fill containerStyles={{ marginTop: 10 }} />}
       noBorder
       navigation={{ name: 'Detail', params: props }}

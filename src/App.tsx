@@ -1,10 +1,21 @@
 import FirebaseProvider from '@context/FirebaseProvider';
 import Navigation from '@navigations/AppNavigator';
+import gradientReducer from '@store/reducers/gradient';
 import { registerRootComponent, AppLoading } from 'expo';
 import * as Font from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import thunk from 'redux-thunk';
+
+const rootReducer = combineReducers({
+  gradient: gradientReducer,
+});
+
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -14,12 +25,14 @@ const App: React.FC = () => {
   }
 
   return (
-    <SafeAreaProvider>
+    <Provider store={store}>
       <FirebaseProvider>
-        <StatusBar style="dark" />
-        <Navigation />
+        <SafeAreaProvider>
+          <StatusBar style="dark" />
+          <Navigation />
+        </SafeAreaProvider>
       </FirebaseProvider>
-    </SafeAreaProvider>
+    </Provider>
   );
 };
 

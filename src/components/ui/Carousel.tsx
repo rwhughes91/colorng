@@ -78,15 +78,7 @@ const Carousel: React.FC<Props> = (props) => {
     </>
   );
 
-  return (
-    <View style={styles.container}>
-      {Constants.DEVICE_HEIGHT <= 350 ? (
-        <ScrollView contentContainerStyle={{ flex: 1 }}>{output}</ScrollView>
-      ) : (
-        output
-      )}
-    </View>
-  );
+  return <View style={styles.container}>{output}</View>;
 };
 
 const styles = StyleSheet.create({

@@ -24,7 +24,7 @@ const Header: React.FC<Props> = (props) => {
     <HeaderText key="header" color={props.title.color}>
       {props.title.text}
     </HeaderText>,
-    props.description && <Text key="description">{props.description}</Text>,
+    !!props.description && <Text key="description">{props.description}</Text>,
   ];
   const searchInput = <SearchInput key="searchInput" {...props.showInputColors} />;
   const items = [];

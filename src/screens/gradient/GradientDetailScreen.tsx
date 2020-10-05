@@ -3,16 +3,40 @@ import Header from '@components/layouts/Header/Header';
 import Layout from '@components/layouts/Layout';
 import Main from '@components/layouts/Main';
 import LikeButton from '@components/ui/buttons/LikeButton';
+import useFirebase from '@hooks/useFirebase';
 import { NavigationScreenProps } from '@navigations/GradientNavigator';
+import * as actions from '@store/actions/index';
 import { Globals } from '@styles/index';
-import React from 'react';
+import { Gradients, Gradient } from '@typeDefs/index';
+import React, { useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
 
 type Props = NavigationScreenProps<'Detail'>;
 
 const GradientDetailScreen: React.FC<Props> = (props) => {
-  const gradientColors = props.route?.params?.colors.map((color) => color.color);
-  const description = props.route?.params?.description;
+  const firebase = useFirebase();
+  const dispatch = useDispatch();
+  const userGradients = useSelector<{ gradient: { userGradients: Gradients } }, Gradients>(
+    (state) => state.gradient.userGradients
+  );
+  const gradientColors = props.route.params.colors.map((color) => color.hex);
+  const description = props.route.params.description;
+
+  let liked = false;
+  if (userGradients.filter((gradient) => gradient.id === props.route.params.id).length > 0) {
+    liked = true;
+  }
+
+  const onSaveGradientHandler = useCallback(() => {
+    const gradient: Gradient = props.route.params;
+    dispatch(actions.addGradientOrColor('userGradients', gradient, firebase?.user?.uid));
+  }, [dispatch, props.route.params, firebase?.user?.uid]);
+
+  const onRemoveGradientHandler = useCallback(() => {
+    const gradientId = props.route.params.id;
+    dispatch(actions.removeGradientOrColor('userGradients', gradientId, firebase?.user?.uid));
+  }, [dispatch, props.route.params.id, firebase?.user?.uid]);
 
   return (
     <>
@@ -30,12 +54,15 @@ const GradientDetailScreen: React.FC<Props> = (props) => {
           />
 
           <Main small>
-            <GradientDetailScrollView colors={colors} gradients={gradients} />
+            <GradientDetailScrollView colors={props.route.params.colors} gradients={[]} />
           </Main>
         </View>
       </Layout>
       <View style={styles.likeButton}>
-        <LikeButton focused />
+        <LikeButton
+          focused={liked}
+          onPress={liked ? onRemoveGradientHandler : onSaveGradientHandler}
+        />
       </View>
     </>
   );
@@ -49,25 +76,3 @@ const styles = StyleSheet.create({
 });
 
 export default React.memo(GradientDetailScreen);
-
-const colors = [
-  { color: '#3C233C', name: 'Magenta' },
-  { color: '#463B4D', name: 'Dark Gray Violet' },
-  { color: '#688188', name: 'Gray Cyan' },
-  { color: '#CCB58D', name: 'Beige' },
-  { color: '#DFCC73', name: 'Gold' },
-];
-
-const gradients = [
-  { name: 'Architecture', description: 'Somber, serious, and mild', likes: 112, colors },
-  { name: 'Architecture', description: 'Somber, serious, and mild', likes: 112, colors },
-  { name: 'Architecture', description: 'Somber, serious, and mild', likes: 112, colors },
-  { name: 'Architecture', description: 'Somber, serious, and mild', likes: 112, colors },
-  { name: 'Architecture', description: 'Somber, serious, and mild', likes: 112, colors },
-];
-
-{
-  /* <Main small>
-<GradientDetailScrollView colors={colors} gradients={gradients} />
-</Main> */
-}

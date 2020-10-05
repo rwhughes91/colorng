@@ -56,3 +56,5 @@ export const LIKE_BUTTON_STYLES: {
     moderateVerticalScale(10, 3),
   right: 10,
 };
+
+export const ACTIVE_OPACITY = 0.75;

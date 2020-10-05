@@ -17,6 +17,8 @@ interface Props {
   }[];
   showSignUpContainer: boolean;
   buttonTitle: string;
+  onSubmit: () => void;
+  loading?: boolean;
 }
 
 const MARGIN = moderateScale(15);
@@ -48,7 +50,9 @@ const Form: React.FC<Props> = (props) => {
     <View style={styles.form}>
       {formFields}
       <View style={styles.buttonContainer}>
-        <Button>{props.buttonTitle}</Button>
+        <Button onPress={props.onSubmit} loading={props.loading}>
+          {props.buttonTitle}
+        </Button>
         {props.showSignUpContainer && (
           <View style={styles.signUpContainer}>
             <Text color={Colors.GRAY}>Don't have an account?</Text>

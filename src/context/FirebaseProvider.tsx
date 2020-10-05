@@ -1,6 +1,8 @@
 import Firebase from '@services/firebase/client';
+import * as actions from '@store/actions/index';
 import { User } from 'firebase';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
 
 type FirebaseProviderType = {
   firebase: Firebase;
@@ -10,21 +12,31 @@ type FirebaseProviderType = {
 export const FirebaseContext = React.createContext<FirebaseProviderType | null>(null);
 
 const FirebaseProvider: React.FC = (props) => {
+  const dispatch = useDispatch();
   const [firebase, setFirebase] = useState<FirebaseProviderType>({
-    firebase: Firebase.init(),
+    firebase: Firebase,
     user: null,
   });
+  const authFlag = useRef(true);
 
   useEffect(() => {
     const unsubscribeAuth = Firebase.auth.onAuthStateChanged((user) => {
       if (user) {
-        setFirebase({ firebase: Firebase, user });
+        if (authFlag.current) {
+          setFirebase({ firebase: Firebase, user });
+          dispatch(actions.fetchUsersGradientsAndColors(user.uid));
+          authFlag.current = false;
+        }
       } else {
-        setFirebase({ firebase: Firebase, user: null });
+        if (!authFlag.current) {
+          setFirebase({ firebase: Firebase, user: null });
+          dispatch(actions.clearLists());
+          authFlag.current = true;
+        }
       }
     });
     return () => unsubscribeAuth();
-  }, [firebase.user]);
+  }, [firebase.user, dispatch]);
 
   return <FirebaseContext.Provider value={firebase}>{props.children}</FirebaseContext.Provider>;
 };

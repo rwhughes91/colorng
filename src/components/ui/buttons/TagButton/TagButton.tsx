@@ -1,5 +1,5 @@
 import Text from '@components/ui/text/Text';
-import { Colors, Typography } from '@styles/index';
+import { Colors, Globals, Typography } from '@styles/index';
 import React from 'react';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
@@ -10,8 +10,8 @@ interface Props {
 
 const TagButton: React.FC<Props> = (props) => {
   return (
-    <TouchableOpacity style={styles.buttonContainer}>
-      <Text size={Typography.FONT_SIZE_12} styles={styles.delete}>
+    <TouchableOpacity style={styles.buttonContainer} activeOpacity={Globals.ACTIVE_OPACITY}>
+      <Text size={Typography.FONT_SIZE_14} styles={styles.delete}>
         X
       </Text>
       <Text size={Typography.FONT_SIZE_12} styles={styles.text}>
@@ -35,7 +35,8 @@ const styles = StyleSheet.create({
     paddingVertical: moderateVerticalScale(4, 0.2),
   },
   delete: {
-    paddingHorizontal: moderateScale(5, 0.2),
+    paddingLeft: moderateScale(5, 0.2),
+    paddingRight: moderateScale(3, 0.2),
   },
   text: {
     paddingHorizontal: moderateScale(3, 0.2),

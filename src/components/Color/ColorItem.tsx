@@ -8,7 +8,7 @@ import Color from './Color';
 
 interface Props {
   name: string;
-  color: string;
+  hex: string;
   icon?: boolean;
   fill?: boolean;
   styles?: StyleProp<ViewStyle>;
@@ -23,7 +23,7 @@ const ColorItem: React.FC<Props> = (props) => {
   return (
     <Animated.View style={[styles.container, { flex: props.fill ? 1 : 0 }, props.styles]}>
       <Color
-        color={props.color}
+        color={props.hex}
         colorStyles={[props.colorStyles, { opacity: 1 }]}
         fill={props.fill}
         scaleVertical

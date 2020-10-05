@@ -3,11 +3,10 @@ import ColorListLayout from '@components/layouts/ColorListLayout';
 import Header from '@components/layouts/Header/Header';
 import Layout from '@components/layouts/Layout';
 import Button from '@components/ui/buttons/Button';
-import * as Constants from '@constants/index';
 import { NavigationScreenProps } from '@navigations/CreateNavigator';
 import { Colors } from '@styles/index';
 import React from 'react';
-import { ScrollView, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 type Props = NavigationScreenProps<'Image'>;
 
@@ -17,7 +16,7 @@ const CreateFromInputScreen: React.FC<Props> = () => {
       <CheckMarkIcon size={24} color="green" />
     </View>
   );
-  let items = (
+  const items = (
     <View style={{ flex: 1, justifyContent: 'flex-end' }}>
       <ColorListLayout
         colors={colors}
@@ -29,20 +28,6 @@ const CreateFromInputScreen: React.FC<Props> = () => {
       </View>
     </View>
   );
-  if (Constants.DEVICE_HEIGHT < 600) {
-    items = (
-      <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'flex-end' }}>
-        <ColorListLayout
-          colors={colors}
-          title="Select from Your Colors"
-          customIcon={checkMarkIconContainer}
-        />
-        <View style={styles.buttonContainer}>
-          <Button>Save</Button>
-        </View>
-      </ScrollView>
-    );
-  }
   return (
     <>
       <Layout header whiteBackground>
