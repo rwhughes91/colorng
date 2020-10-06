@@ -6,11 +6,16 @@ import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 
 interface Props {
   title: string;
+  onPress: () => void;
 }
 
 const TagButton: React.FC<Props> = (props) => {
   return (
-    <TouchableOpacity style={styles.buttonContainer} activeOpacity={Globals.ACTIVE_OPACITY}>
+    <TouchableOpacity
+      style={styles.buttonContainer}
+      activeOpacity={Globals.ACTIVE_OPACITY}
+      onPress={props.onPress}
+    >
       <Text size={Typography.FONT_SIZE_14} styles={styles.delete}>
         X
       </Text>

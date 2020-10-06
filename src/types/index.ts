@@ -19,6 +19,7 @@ export interface Gradient {
   id: string;
   name: string;
   likes: number;
+  colorSearch: string[];
   description?: string;
   colors: Colors;
 }

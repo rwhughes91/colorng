@@ -6,13 +6,14 @@ import ColorButton from './TagButton';
 
 interface Props {
   buttons: string[];
+  onPress: (title: string) => void;
 }
 
 const ColorButtons: React.FC<Props> = (props) => {
   return (
     <View style={styles.buttonContainer}>
       {props.buttons.map((button, i) => (
-        <ColorButton key={i} title={button} />
+        <ColorButton key={i} title={button} onPress={() => props.onPress(button)} />
       ))}
     </View>
   );

@@ -3,7 +3,7 @@ import useNavigation from '@hooks/useNavigation';
 import { Colors } from '@styles/index';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useRef, useCallback } from 'react';
-import { View, TextInput, StyleProp, ViewStyle, TextStyle } from 'react-native';
+import { View, TextInput, StyleProp, ViewStyle, TextStyle, TouchableOpacity } from 'react-native';
 
 import styles from './InputStyles';
 
@@ -14,45 +14,58 @@ interface Props {
   noIcon?: boolean;
   iconColor?: string;
   placeholderColor?: string;
-  onSubmitEditingHandler?: () => void;
+  onSubmitEditingHandler?: (x: string) => void;
   styles?: StyleProp<ViewStyle>;
   inputStyles?: StyleProp<TextStyle>;
 }
 
 const SearchInput: React.FC<Props> = (props) => {
   const textInputRef = useRef<TextInput>(null);
-  const navigateToSearch = useNavigation<{ text: string }>({ name: 'Search' });
+  const navigateToSearch = useNavigation<{ tag: string }>({ name: 'Search' });
 
+  const customOnSubmitEditingHandler = props.onSubmitEditingHandler;
   const onSubmitEditingHandler = useCallback(
     ({ nativeEvent }) => {
       if (nativeEvent.text.length > 0) {
-        textInputRef.current?.clear();
-        navigateToSearch({ text: nativeEvent.text });
+        if (customOnSubmitEditingHandler) {
+          textInputRef.current?.clear();
+          customOnSubmitEditingHandler(nativeEvent.text);
+        }
       }
     },
-    [navigateToSearch]
+    [customOnSubmitEditingHandler]
   );
 
+  const onPressHandler = useCallback(() => {
+    if (!customOnSubmitEditingHandler) {
+      navigateToSearch();
+    }
+  }, [customOnSubmitEditingHandler, navigateToSearch]);
+
   return (
-    <LinearGradient
-      colors={props.backgroundColors || ['white', 'white']}
-      style={[styles.container, props.styles]}
-      start={[0, 1]}
-      end={[1, 0]}
-    >
-      {!props.noIcon && (
-        <View style={styles.searchIconContainer}>
-          <Feather name="search" size={24} color={props.iconColor || Colors.BLUE} />
-        </View>
-      )}
-      <TextInput
-        style={[{ ...styles.searchInput, color: props.color || Colors.BLUE }, props.inputStyles]}
-        placeholder={props.placeholder || 'Search a color'}
-        onSubmitEditing={props.onSubmitEditingHandler || onSubmitEditingHandler}
-        ref={textInputRef}
-        placeholderTextColor={props.placeholderColor}
-      />
-    </LinearGradient>
+    <TouchableOpacity activeOpacity={1} onPress={onPressHandler}>
+      <LinearGradient
+        colors={props.backgroundColors || ['white', 'white']}
+        style={[styles.container, props.styles]}
+        start={[0, 1]}
+        end={[1, 0]}
+      >
+        {!props.noIcon && (
+          <View style={styles.searchIconContainer}>
+            <Feather name="search" size={24} color={props.iconColor || Colors.BLUE} />
+          </View>
+        )}
+        <TextInput
+          style={[{ ...styles.searchInput, color: props.color || Colors.BLUE }, props.inputStyles]}
+          placeholder={props.placeholder || 'Search a color'}
+          onSubmitEditing={onSubmitEditingHandler}
+          ref={textInputRef}
+          placeholderTextColor={props.placeholderColor}
+          autoFocus={!!customOnSubmitEditingHandler}
+          pointerEvents={!customOnSubmitEditingHandler ? 'none' : 'auto'}
+        />
+      </LinearGradient>
+    </TouchableOpacity>
   );
 };
 

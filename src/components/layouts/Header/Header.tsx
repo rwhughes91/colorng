@@ -17,6 +17,8 @@ interface Props {
   description?: string;
   showInput?: boolean;
   styles?: StyleProp<ViewStyle>;
+  onSubmitEditingHandler?: (x?: any) => void;
+  searchInputPlaceholder?: string;
 }
 
 const Header: React.FC<Props> = (props) => {
@@ -26,7 +28,14 @@ const Header: React.FC<Props> = (props) => {
     </HeaderText>,
     !!props.description && <Text key="description">{props.description}</Text>,
   ];
-  const searchInput = <SearchInput key="searchInput" {...props.showInputColors} />;
+  const searchInput = (
+    <SearchInput
+      key="searchInput"
+      {...props.showInputColors}
+      onSubmitEditingHandler={props.onSubmitEditingHandler}
+      placeholder={props.searchInputPlaceholder}
+    />
+  );
   const items = [];
   if (props.showInput) {
     if (props.title.location === 'above') {

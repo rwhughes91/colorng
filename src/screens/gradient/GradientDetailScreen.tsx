@@ -8,6 +8,7 @@ import { NavigationScreenProps } from '@navigations/GradientNavigator';
 import * as actions from '@store/actions/index';
 import { Globals } from '@styles/index';
 import { Gradients, Gradient } from '@typeDefs/index';
+import { capitalize } from '@utils/helpers';
 import React, { useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
@@ -20,7 +21,9 @@ const GradientDetailScreen: React.FC<Props> = (props) => {
   const userGradients = useSelector<{ gradient: { userGradients: Gradients } }, Gradients>(
     (state) => state.gradient.userGradients
   );
-  const gradientColors = props.route.params.colors.map((color) => color.hex);
+  const gradientColors = props.route.params.colors.map((color) =>
+    color.hex.startsWith('#') ? color.hex : `#${color.hex}`
+  );
   const description = props.route.params.description;
 
   let liked = false;
@@ -48,7 +51,7 @@ const GradientDetailScreen: React.FC<Props> = (props) => {
       >
         <View style={styles.container}>
           <Header
-            title={{ text: props.route.params.name, location: 'above' }}
+            title={{ text: capitalize(props.route.params.name), location: 'above' }}
             description={description}
             styles={{ justifyContent: 'center' }}
           />

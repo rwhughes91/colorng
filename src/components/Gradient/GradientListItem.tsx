@@ -4,6 +4,7 @@ import Text from '@components/ui/text/Text';
 import useNavigation from '@hooks/useNavigation';
 import { Colors, Globals } from '@styles/index';
 import { Gradient } from '@typeDefs/index';
+import { capitalize } from '@utils/helpers';
 import React, { useCallback } from 'react';
 import { View, StyleSheet, StyleProp, ViewStyle, TouchableOpacity } from 'react-native';
 import { moderateVerticalScale } from 'react-native-size-matters';
@@ -37,7 +38,8 @@ const GradientListItem: React.FC<Props> = (props) => {
       onPress={onClickHandler}
     >
       <View style={[styles.textContainer, { width: Globals.COLOR_SIZE * 5 }]}>
-        <Text color={Colors.BLUE}>{props.name}</Text>
+        <Text color={Colors.BLUE}>{capitalize(props.name)}</Text>
+        {/* <Text color={Colors.PINK}>{`${props.likes} ${props.likes === 1 ? 'like' : 'likes'}`}</Text> */}
       </View>
       <View style={styles.gradientContainer}>
         <View style={[styles.colorsContainer]}>
@@ -58,7 +60,7 @@ const GradientListItem: React.FC<Props> = (props) => {
             return (
               <Color
                 key={i}
-                color={color.hex}
+                color={color.hex.startsWith('#') ? color.hex : `#${color.hex}`}
                 colorStyles={{ position: 'relative', ...additionalStyles }}
               />
             );

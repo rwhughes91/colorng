@@ -4,6 +4,7 @@ import useFirebase from '@hooks/useFirebase';
 import * as actions from '@store/actions/index';
 import { Colors, Globals } from '@styles/index';
 import { Colors as ColorsType } from '@typeDefs/index';
+import { capitalize } from '@utils/helpers';
 import React, { useCallback } from 'react';
 import {
   View,
@@ -60,7 +61,7 @@ const ColorItem: React.FC<Props> = (props) => {
   return (
     <Animated.View style={[styles.container, { flex: props.fill ? 1 : 0 }, props.styles]}>
       <Color
-        color={props.hex}
+        color={props.hex.startsWith('#') ? props.hex : `#${props.hex}`}
         colorStyles={[props.colorStyles, { opacity: 1 }]}
         fill={props.fill}
         scaleVertical
@@ -68,7 +69,7 @@ const ColorItem: React.FC<Props> = (props) => {
       {!props.colorOnly && (
         <View style={[styles.TextContainer, props.textStylesView]}>
           <Text color={Colors.BLUE} styles={props.textStyles}>
-            {props.name}
+            {capitalize(props.name)}
           </Text>
           {props.icon && (
             <TouchableOpacity

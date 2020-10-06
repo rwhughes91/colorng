@@ -14,7 +14,7 @@ if (!firebase.apps.length) {
   db = firebase.firestore();
 }
 
-type UsersArrays = 'gradients' | 'colors';
+type UsersArrays = 'savedGradients' | 'savedColors';
 
 export default class Firebase {
   static auth = auth;
@@ -34,6 +34,30 @@ export default class Firebase {
 
   static sendResetToken(email: string) {
     return this.auth.sendPasswordResetEmail(email);
+  }
+
+  static async paginateDataArray<T>(
+    collection: string,
+    conditions: { field: string; operator: WhereFilterOp; eq: any }[],
+    orderBy = 'likes',
+    limit = 50,
+    startAt = 0
+  ): Promise<(T & { id: string })[]> {
+    const ref = this.db.collection(collection);
+    let snapshot = ref.where(conditions[0].field, conditions[0].operator, conditions[0].eq);
+    for (const condition of conditions.slice(1)) {
+      snapshot = snapshot.where(condition.field, condition.operator, condition.eq);
+    }
+    const docs = await snapshot.orderBy(orderBy, 'desc').startAt(startAt).limit(limit).get();
+
+    if (docs.empty) {
+      return [];
+    }
+    const dataArray: (T & { id: string })[] = [];
+    docs.forEach((gradient) => {
+      dataArray.push({ ...gradient.data(), id: gradient.id } as T & { id: string });
+    });
+    return dataArray;
   }
 
   static async getDataArray<T>(

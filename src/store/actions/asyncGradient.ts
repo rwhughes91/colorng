@@ -11,6 +11,18 @@ interface Thunk {
   (x?: any): Dispatch;
 }
 
+interface Users {
+  savedGradients?: Gradients;
+  savedColors?: Colors;
+  createdGradients?: Gradients;
+  id: string;
+}
+
+interface ReduxUserGradients {
+  userGradients: Gradients;
+  userColors: Colors;
+}
+
 const pullTodaysGradientsFromFirebase = async (dispatch: any, today: Date) => {
   try {
     const newGradients = await Firebase.getDataArray<Gradient>('todaysGradients');
@@ -65,56 +77,62 @@ export const fetchUsersGradientsAndColors: Thunk = (userId?: string) => {
 
     if (userId) {
       try {
-        const payload: { userGradients: Gradients; userColors: Colors } = {
+        const payload: ReduxUserGradients = {
           userGradients: [],
           userColors: [],
         };
-        const userData = await Firebase.getDataItem<{ gradients: Gradients; colors: Colors }>(
-          'users',
-          userId
-        );
+        const userData = await Firebase.getDataItem<Users>('users', userId);
         if (userData) {
-          if (itemsInArray({ ...userData, id: [] })) {
-            if (userData.gradients && userData.gradients.length > 0) {
-              payload.userGradients = payload.userGradients.concat(userData.gradients);
+          if (
+            itemsInArray({
+              savedGradients: userData.savedGradients || [],
+              savedColors: userData.savedColors || [],
+            })
+          ) {
+            if (userData.savedGradients && userData.savedGradients.length > 0) {
+              payload.userGradients = payload.userGradients.concat(userData.savedGradients);
             }
-            if (userData.colors && userData.colors.length > 0) {
-              payload.userColors = payload.userColors.concat(userData.colors);
+            if (userData.savedColors && userData.savedColors.length > 0) {
+              payload.userColors = payload.userColors.concat(userData.savedColors);
             }
           }
         }
         if (itemsInArray({ a: savedGradients || [], b: savedColors || [] })) {
           const promises = [];
           if (savedGradients && savedGradients.length > 0) {
-            if (userData && userData.gradients && userData.gradients.length > 0) {
+            if (userData && userData.savedGradients && userData.savedGradients.length > 0) {
               for (const savedGradient of savedGradients) {
-                if (userData.gradients.findIndex((item) => item.id === savedGradient.id) === -1) {
+                if (
+                  userData.savedGradients.findIndex((item) => item.id === savedGradient.id) === -1
+                ) {
                   savedGradientsToAppend.push(savedGradient);
                 }
               }
               if (savedGradientsToAppend.length > 0) {
                 payload.userGradients = payload.userGradients.concat(savedGradientsToAppend);
-                promises.push(Firebase.appendUserData(userId, 'gradients', savedGradientsToAppend));
+                promises.push(
+                  Firebase.appendUserData(userId, 'savedGradients', savedGradientsToAppend)
+                );
               }
             } else {
               payload.userGradients = payload.userGradients.concat(savedGradients);
-              promises.push(Firebase.appendUserData(userId, 'gradients', savedGradients));
+              promises.push(Firebase.appendUserData(userId, 'savedGradients', savedGradients));
             }
           }
           if (savedColors && savedColors.length > 0) {
-            if (userData && userData.colors && userData.colors.length > 0) {
+            if (userData && userData.savedColors && userData.savedColors.length > 0) {
               for (const savedColor of savedColors) {
-                if (userData.colors.findIndex((item) => item.id === savedColor.id) === -1) {
+                if (userData.savedColors.findIndex((item) => item.id === savedColor.id) === -1) {
                   savedColorsToAppend.push(savedColor);
                 }
               }
               if (savedColorsToAppend.length > 0) {
                 payload.userColors = payload.userColors.concat(savedColorsToAppend);
-                promises.push(Firebase.appendUserData(userId, 'colors', savedColorsToAppend));
+                promises.push(Firebase.appendUserData(userId, 'savedColors', savedColorsToAppend));
               }
             } else {
               payload.userColors = payload.userColors.concat(savedColors);
-              promises.push(Firebase.appendUserData(userId, 'colors', savedColors));
+              promises.push(Firebase.appendUserData(userId, 'savedColors', savedColors));
             }
           }
           Promise.all(promises)
@@ -124,14 +142,14 @@ export const fetchUsersGradientsAndColors: Thunk = (userId?: string) => {
             })
             .catch((error) => console.log(error));
         }
-        if (itemsInArray(payload)) {
+        if (itemsInArray({ ...payload })) {
           dispatch(actions.setLists(payload));
         }
       } catch (error) {
         console.log(error);
       }
     } else {
-      const payload: { userGradients: Gradients; userColors: Colors } = {
+      const payload: ReduxUserGradients = {
         userGradients: [],
         userColors: [],
       };
@@ -156,9 +174,9 @@ export const addGradientOrColor = (
   return async (dispatch) => {
     dispatch(actions.appendList(key, value));
     if (userId) {
-      let firebaseKey: 'gradients' | 'colors' = 'colors';
+      let firebaseKey: 'savedGradients' | 'savedColors' = 'savedColors';
       if (key === 'userGradients') {
-        firebaseKey = 'gradients';
+        firebaseKey = 'savedGradients';
       }
       try {
         await Firebase.appendUserData<Gradient | Color>(userId, firebaseKey, [value]);
@@ -179,7 +197,7 @@ export const removeGradientOrColor = (
   return async (dispatch) => {
     dispatch(actions.filterList(key, id));
     if (userId) {
-      const newKey = key === 'userGradients' ? 'gradients' : 'colors';
+      const newKey = key === 'userGradients' ? 'savedGradients' : 'savedColors';
       await Firebase.removeItemFromUsersArray(userId, newKey, id);
     } else {
       const savedItems = await getObject<Gradients | Colors>(key);
