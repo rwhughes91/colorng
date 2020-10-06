@@ -86,28 +86,32 @@ export const fetchUsersGradientsAndColors: Thunk = (userId?: string) => {
         if (itemsInArray({ a: savedGradients || [], b: savedColors || [] })) {
           const promises = [];
           if (savedGradients && savedGradients.length > 0) {
-            if (userData && userData.gradients.length > 0) {
+            if (userData && userData.gradients && userData.gradients.length > 0) {
               for (const savedGradient of savedGradients) {
                 if (userData.gradients.findIndex((item) => item.id === savedGradient.id) === -1) {
                   savedGradientsToAppend.push(savedGradient);
                 }
               }
-              payload.userGradients = payload.userGradients.concat(savedGradientsToAppend);
-              promises.push(Firebase.appendUserData(userId, 'gradients', savedGradientsToAppend));
+              if (savedGradientsToAppend.length > 0) {
+                payload.userGradients = payload.userGradients.concat(savedGradientsToAppend);
+                promises.push(Firebase.appendUserData(userId, 'gradients', savedGradientsToAppend));
+              }
             } else {
               payload.userGradients = payload.userGradients.concat(savedGradients);
               promises.push(Firebase.appendUserData(userId, 'gradients', savedGradients));
             }
           }
           if (savedColors && savedColors.length > 0) {
-            if (userData && userData.colors.length > 0) {
+            if (userData && userData.colors && userData.colors.length > 0) {
               for (const savedColor of savedColors) {
                 if (userData.colors.findIndex((item) => item.id === savedColor.id) === -1) {
                   savedColorsToAppend.push(savedColor);
                 }
               }
-              payload.userColors = payload.userColors.concat(savedColorsToAppend);
-              promises.push(Firebase.appendUserData(userId, 'colors', savedColorsToAppend));
+              if (savedColorsToAppend.length > 0) {
+                payload.userColors = payload.userColors.concat(savedColorsToAppend);
+                promises.push(Firebase.appendUserData(userId, 'colors', savedColorsToAppend));
+              }
             } else {
               payload.userColors = payload.userColors.concat(savedColors);
               promises.push(Firebase.appendUserData(userId, 'colors', savedColors));

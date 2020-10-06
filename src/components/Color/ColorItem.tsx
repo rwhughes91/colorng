@@ -1,8 +1,20 @@
 import HeartIcon from '@components/icons/HeartIcon';
 import Text from '@components/ui/text/Text';
-import { Colors } from '@styles/index';
-import React from 'react';
-import { View, StyleSheet, StyleProp, ViewStyle, TextStyle, Animated } from 'react-native';
+import useFirebase from '@hooks/useFirebase';
+import * as actions from '@store/actions/index';
+import { Colors, Globals } from '@styles/index';
+import { Colors as ColorsType } from '@typeDefs/index';
+import React, { useCallback } from 'react';
+import {
+  View,
+  StyleSheet,
+  StyleProp,
+  ViewStyle,
+  TextStyle,
+  Animated,
+  TouchableOpacity,
+} from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
 
 import Color from './Color';
 
@@ -20,6 +32,31 @@ interface Props {
 }
 
 const ColorItem: React.FC<Props> = (props) => {
+  const dispatch = useDispatch();
+  const firebase = useFirebase();
+  const userColors = useSelector<{ gradient: { userColors: ColorsType } }, ColorsType>(
+    (state) => state.gradient.userColors
+  );
+
+  let focused = false;
+  if (userColors.findIndex((item) => item.hex === props.hex) !== -1) {
+    focused = true;
+  }
+
+  const onColorSaveHandler = useCallback(() => {
+    dispatch(
+      actions.addGradientOrColor(
+        'userColors',
+        { name: props.name, hex: props.hex, id: props.hex },
+        firebase?.user?.uid
+      )
+    );
+  }, [dispatch, props.name, props.hex, firebase?.user?.uid]);
+
+  const onColorRemoverHandler = useCallback(() => {
+    dispatch(actions.removeGradientOrColor('userColors', props.hex, firebase?.user?.uid));
+  }, [dispatch, props.hex, firebase?.user?.uid]);
+
   return (
     <Animated.View style={[styles.container, { flex: props.fill ? 1 : 0 }, props.styles]}>
       <Color
@@ -33,7 +70,14 @@ const ColorItem: React.FC<Props> = (props) => {
           <Text color={Colors.BLUE} styles={props.textStyles}>
             {props.name}
           </Text>
-          {props.icon && <HeartIcon size={24} focused={false} color={Colors.GRAY} />}
+          {props.icon && (
+            <TouchableOpacity
+              onPress={focused ? onColorRemoverHandler : onColorSaveHandler}
+              activeOpacity={Globals.ACTIVE_OPACITY}
+            >
+              <HeartIcon size={24} focused={focused} color={focused ? Colors.PINK : Colors.GRAY} />
+            </TouchableOpacity>
+          )}
           {props.customIcon}
         </View>
       )}
