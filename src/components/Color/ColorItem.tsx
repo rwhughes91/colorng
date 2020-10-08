@@ -75,6 +75,7 @@ const ColorItem: React.FC<Props> = (props) => {
             <TouchableOpacity
               onPress={focused ? onColorRemoverHandler : onColorSaveHandler}
               activeOpacity={Globals.ACTIVE_OPACITY}
+              style={{ padding: 10 }}
             >
               <HeartIcon size={24} focused={focused} color={focused ? Colors.PINK : Colors.GRAY} />
             </TouchableOpacity>
@@ -96,6 +97,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingLeft: 20,
+    paddingRight: 10,
     borderColor: Colors.LIGHT_GRAY,
     borderBottomWidth: 1,
   },

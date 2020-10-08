@@ -12,6 +12,7 @@ interface Props {
   height?: number | string;
   animated?: boolean;
   animatedStyles?: Animated.WithAnimatedValue<StyleProp<ViewStyle>>;
+  gradientLocations?: number[];
 }
 
 const BackDrop: React.FC<Props> = (props) => {
@@ -36,6 +37,7 @@ const BackDrop: React.FC<Props> = (props) => {
       <LinearGradient
         style={style}
         colors={props.colors ? props.colors : [Colors.ORANGE, Colors.PINK]}
+        locations={props.gradientLocations}
       />
       {props.cover !== undefined && props.top !== undefined ? <View style={styles.cover} /> : null}
     </>

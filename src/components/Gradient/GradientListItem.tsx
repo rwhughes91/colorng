@@ -44,19 +44,19 @@ const GradientListItem: React.FC<Props> = (props) => {
       <View style={styles.gradientContainer}>
         <View style={[styles.colorsContainer]}>
           {props.colors.map((color, i) => {
-            let additionalStyles = {};
-            if (i === 0) {
-              additionalStyles = {
-                borderTopLeftRadius: Globals.BORDER_RADIUS_SMALL,
-                borderBottomLeftRadius: Globals.BORDER_RADIUS_SMALL,
-              };
-            }
-            if (i === props.colors.length - 1) {
-              additionalStyles = {
-                borderTopRightRadius: Globals.BORDER_RADIUS_SMALL,
-                borderBottomRightRadius: Globals.BORDER_RADIUS_SMALL,
-              };
-            }
+            const additionalStyles = {};
+            // if (i === 0) {
+            //   additionalStyles = {
+            //     borderTopLeftRadius: Globals.BORDER_RADIUS_SMALL,
+            //     borderBottomLeftRadius: Globals.BORDER_RADIUS_SMALL,
+            //   };
+            // }
+            // if (i === props.colors.length - 1) {
+            //   additionalStyles = {
+            //     borderTopRightRadius: Globals.BORDER_RADIUS_SMALL,
+            //     borderBottomRightRadius: Globals.BORDER_RADIUS_SMALL,
+            //   };
+            // }
             return (
               <Color
                 key={i}

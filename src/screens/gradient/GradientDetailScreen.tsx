@@ -3,17 +3,23 @@ import Header from '@components/layouts/Header/Header';
 import Layout from '@components/layouts/Layout';
 import Main from '@components/layouts/Main';
 import LikeButton from '@components/ui/buttons/LikeButton';
+import * as Constants from '@constants/index';
 import useFirebase from '@hooks/useFirebase';
 import { NavigationScreenProps } from '@navigations/GradientNavigator';
 import * as actions from '@store/actions/index';
-import { Globals } from '@styles/index';
+import { Globals, Mixins } from '@styles/index';
 import { Gradients, Gradient } from '@typeDefs/index';
 import { capitalize } from '@utils/helpers';
+import { StatusBar } from 'expo-status-bar';
 import React, { useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
 type Props = NavigationScreenProps<'Detail'>;
+
+const calculateCutoff = () => {
+  return (Mixins.backdropHeight() - Constants.DEVICE_WIDTH) / 2 / Mixins.backdropHeight();
+};
 
 const GradientDetailScreen: React.FC<Props> = (props) => {
   const firebase = useFirebase();
@@ -41,13 +47,21 @@ const GradientDetailScreen: React.FC<Props> = (props) => {
     dispatch(actions.removeGradientOrColor('userGradients', gradientId, firebase?.user?.uid));
   }, [dispatch, props.route.params.id, firebase?.user?.uid]);
 
+  const colorWidth = (calculateCutoff() * 2) / gradientColors.length;
+  const gradientLocations = [];
+  for (let i = 1; i <= gradientColors.length; i++) {
+    gradientLocations.push(colorWidth * i + calculateCutoff() / 2);
+  }
+
   return (
     <>
+      <StatusBar style="light" />
       <Layout
         whiteBackground
         gradient
         gradientColors={gradientColors}
         backdropPosition={-Globals.BACKDROP_TRANSLATE_SMALL}
+        gradientLocations={gradientLocations}
       >
         <View style={styles.container}>
           <Header
@@ -55,7 +69,6 @@ const GradientDetailScreen: React.FC<Props> = (props) => {
             description={description}
             styles={{ justifyContent: 'center' }}
           />
-
           <Main small>
             <GradientDetailScrollView colors={props.route.params.colors} gradients={[]} />
           </Main>

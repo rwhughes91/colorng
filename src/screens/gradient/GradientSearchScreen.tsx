@@ -20,6 +20,8 @@ const GradientSearch: React.FC<Props> = () => {
   const [gradients, setGradients] = useState<Gradients>([]);
   const [loading, setLoading] = useState(false);
 
+  // TODO: handle on refresh functionality (when gradients lists becomes long enough)
+
   useEffect(() => {
     if (tags.length === 1 && tags[0] !== firstTag.current) {
       setLoading(true);
@@ -76,7 +78,7 @@ const GradientSearch: React.FC<Props> = () => {
   let output = (
     <EmptyGradientList
       title="No gradients found"
-      body="Try searching more generally. Note, the only adjectives we support are light, dark, and semi-dark. Additionally, you can only add adjectives to shades (e.g., red, blue, yellow, etc.)"
+      body="Note, the only adjectives we support are light, dark, and semi-dark. Additionally, you can only add adjectives to shades (e.g., light red, dark blue, semi-dark yellow, etc.)"
     />
   );
   if (tags.length === 0) {

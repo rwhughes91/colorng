@@ -16,6 +16,7 @@ interface Props {
   containerStyles?: StyleProp<ViewStyle>;
   children: React.ReactNode;
   cover?: boolean;
+  gradientLocations?: number[];
 }
 
 const Layout: React.FC<Props> = (props) => {
@@ -35,6 +36,7 @@ const Layout: React.FC<Props> = (props) => {
           borderRadius={props.borderRadius}
           height={props.height}
           cover={props.cover}
+          gradientLocations={props.gradientLocations}
         />
       )}
       <View

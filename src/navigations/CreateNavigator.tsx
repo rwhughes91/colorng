@@ -9,10 +9,10 @@ import { Spacing, Colors } from '@styles/index';
 import React from 'react';
 import { Platform } from 'react-native';
 
-type Params = 'Create' | 'Image' | 'Input';
-
 type CreateStackParamList = {
-  [param in Params]: undefined;
+  Image: { uri: string };
+  Create: { error?: string };
+  Input: undefined;
 };
 
 export interface NavigationScreenProps<T extends keyof CreateStackParamList> {
