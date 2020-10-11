@@ -6,12 +6,14 @@ export interface InitialState {
   userGradients: Gradients;
   userColors: Colors;
   todaysGradients: Gradients;
+  createdGradients: Gradients;
 }
 
 const initialState: InitialState = {
   userGradients: [],
   userColors: [],
   todaysGradients: [],
+  createdGradients: [],
 };
 
 export default (state = initialState, action: SystemActionTypes) => {

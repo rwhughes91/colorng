@@ -1,4 +1,5 @@
 import { WhereFilterOp } from '@google-cloud/firestore';
+import Gradient from '@models/Gradient';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
@@ -14,7 +15,7 @@ if (!firebase.apps.length) {
   db = firebase.firestore();
 }
 
-type UsersArrays = 'savedGradients' | 'savedColors';
+type UsersArrays = 'savedGradients' | 'savedColors' | 'createdGradients';
 
 export default class Firebase {
   static auth = auth;
@@ -108,10 +109,12 @@ export default class Firebase {
     const doc = await ref.get();
     if (doc.exists) {
       try {
-        await ref.update({ [key]: firebase.firestore.FieldValue.arrayUnion(...value) });
+        await ref.update({
+          [key]: firebase.firestore.FieldValue.arrayUnion(...JSON.parse(JSON.stringify(value))),
+        });
         return true;
       } catch (error) {
-        throw new Error(`Could not update user's (${uid}) data`);
+        throw new Error(`Could not update user's (${uid}) data. ${error.message}`);
       }
     } else {
       try {
@@ -138,5 +141,26 @@ export default class Firebase {
       }
     }
     return false;
+  }
+
+  static async addGradient(gradient: Gradient): Promise<string> {
+    const res = await this.db.collection('gradients').add(
+      JSON.parse(
+        JSON.stringify({
+          ...gradient,
+          createdAt: firebase.firestore.Timestamp.now(),
+        })
+      )
+    );
+    return res.id;
+  }
+
+  static async removeGradient(id: string): Promise<boolean> {
+    try {
+      await this.db.collection('gradients').doc(id).delete();
+      return true;
+    } catch (error) {
+      throw new Error(error.message);
+    }
   }
 }

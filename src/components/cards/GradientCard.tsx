@@ -3,7 +3,7 @@ import Card from '@components/ui/Card';
 import { Gradient } from '@typeDefs/index';
 import React from 'react';
 
-type Props = Gradient & { createdAt: string };
+type Props = Gradient;
 
 const GradientCard: React.FC<Props> = (props) => {
   const gradient: any = { ...props };

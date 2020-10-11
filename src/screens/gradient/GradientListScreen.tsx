@@ -4,18 +4,25 @@ import Layout from '@components/layouts/Layout';
 import Carousel from '@components/ui/Carousel';
 import Loader from '@components/ui/Loader';
 import { NavigationScreenProps } from '@navigations/GradientNavigator';
+import * as actions from '@store/actions/index';
 import { Gradients } from '@typeDefs/index';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 type Props = NavigationScreenProps<'List'>;
 
 const GradientListScreen: React.FC<Props> = () => {
+  const dispatch = useDispatch();
   const todaysGradients = useSelector<{ gradient: { todaysGradients: Gradients } }, Gradients>(
     (state) => state.gradient.todaysGradients
   );
   const items = todaysGradients.map((gradient) => <GradientCard {...gradient} />);
+
+  useEffect(() => {
+    dispatch(actions.fetchTodaysGradients());
+  }, [dispatch]);
+
   return (
     <Layout header gradient>
       <View style={styles.container}>

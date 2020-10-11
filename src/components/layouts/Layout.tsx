@@ -2,6 +2,7 @@ import BackDrop from '@components/ui/BackDrop';
 import { HeaderHeightContext } from '@react-navigation/stack';
 import { Colors } from '@styles/index';
 import Constants from 'expo-constants';
+import { StatusBar } from 'expo-status-bar';
 import React, { useContext } from 'react';
 import { View, StyleSheet, Platform, StyleProp, ViewStyle } from 'react-native';
 
@@ -17,6 +18,7 @@ interface Props {
   children: React.ReactNode;
   cover?: boolean;
   gradientLocations?: number[];
+  statusBarColor?: 'dark' | 'light';
 }
 
 const Layout: React.FC<Props> = (props) => {
@@ -28,33 +30,36 @@ const Layout: React.FC<Props> = (props) => {
   }
 
   return (
-    <View style={layoutStyles}>
-      {props.gradient && (
-        <BackDrop
-          colors={props.gradientColors}
-          top={props.backdropPosition}
-          borderRadius={props.borderRadius}
-          height={props.height}
-          cover={props.cover}
-          gradientLocations={props.gradientLocations}
-        />
-      )}
-      <View
-        style={[
-          {
-            ...styles.container,
-            paddingTop: props.header
-              ? headerHeight
-              : Platform.OS === 'android'
-              ? Constants.statusBarHeight * 3
-              : Constants.statusBarHeight * 2,
-          },
-          props.containerStyles,
-        ]}
-      >
-        {props.children}
+    <>
+      <StatusBar style={props.statusBarColor || 'dark'} />
+      <View style={layoutStyles}>
+        {props.gradient && (
+          <BackDrop
+            colors={props.gradientColors}
+            top={props.backdropPosition}
+            borderRadius={props.borderRadius}
+            height={props.height}
+            cover={props.cover}
+            gradientLocations={props.gradientLocations}
+          />
+        )}
+        <View
+          style={[
+            {
+              ...styles.container,
+              paddingTop: props.header
+                ? headerHeight
+                : Platform.OS === 'android'
+                ? Constants.statusBarHeight * 3
+                : Constants.statusBarHeight * 2,
+            },
+            props.containerStyles,
+          ]}
+        >
+          {props.children}
+        </View>
       </View>
-    </View>
+    </>
   );
 };
 

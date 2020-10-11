@@ -21,6 +21,7 @@ interface Users {
 interface ReduxUserGradients {
   userGradients: Gradients;
   userColors: Colors;
+  createdGradients: Gradients;
 }
 
 const pullTodaysGradientsFromFirebase = async (dispatch: any, today: Date) => {
@@ -30,7 +31,7 @@ const pullTodaysGradientsFromFirebase = async (dispatch: any, today: Date) => {
       const gradients = newGradients.map((gradient) => {
         const strippedColors = [];
         for (const color of gradient.colors) {
-          const strippedColor: Color = { name: capitalize(color.name), hex: `#${color.hex}` };
+          const strippedColor: Color = { name: capitalize(color.name), hex: color.hex };
           strippedColors.push(strippedColor);
         }
         return {
@@ -80,6 +81,7 @@ export const fetchUsersGradientsAndColors: Thunk = (userId?: string) => {
         const payload: ReduxUserGradients = {
           userGradients: [],
           userColors: [],
+          createdGradients: [],
         };
         const userData = await Firebase.getDataItem<Users>('users', userId);
         if (userData) {
@@ -95,6 +97,9 @@ export const fetchUsersGradientsAndColors: Thunk = (userId?: string) => {
             if (userData.savedColors && userData.savedColors.length > 0) {
               payload.userColors = payload.userColors.concat(userData.savedColors);
             }
+          }
+          if (userData.createdGradients && userData.createdGradients.length > 0) {
+            payload.createdGradients = payload.createdGradients.concat(userData.createdGradients);
           }
         }
         if (itemsInArray({ a: savedGradients || [], b: savedColors || [] })) {
@@ -152,6 +157,7 @@ export const fetchUsersGradientsAndColors: Thunk = (userId?: string) => {
       const payload: ReduxUserGradients = {
         userGradients: [],
         userColors: [],
+        createdGradients: [],
       };
       if (savedGradients) {
         payload.userGradients = savedGradients;
@@ -209,6 +215,46 @@ export const removeGradientOrColor = (
           );
         } catch (error) {}
       }
+    }
+  };
+};
+
+export const createGradient = (userId: string, value: Gradient): Dispatch => {
+  return async (dispatch) => {
+    if (!userId) {
+      throw new Error('Must be a user to create a gradient');
+    }
+    const gradientToAdd = {
+      ...value,
+      colors: value.colors.map((color) => {
+        return { name: color.name, hex: color.hex };
+      }),
+    };
+    try {
+      const id = await Firebase.addGradient(value);
+      dispatch(actions.appendList('createdGradients', { ...gradientToAdd, id }));
+      await Firebase.appendUserData<Gradient>(userId, 'createdGradients', [
+        { ...gradientToAdd, id },
+      ]);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+};
+
+export const deleteGradient = (userId: string, id: string): Dispatch => {
+  return async (dispatch) => {
+    if (!userId) {
+      throw new Error('Must be a user to delete a gradient');
+    }
+    try {
+      dispatch(actions.filterList('createdGradients', id));
+      const res = await Firebase.removeGradient(userId);
+      if (res) {
+        await Firebase.removeItemFromUsersArray(userId, 'createdGradients', id);
+      }
+    } catch (error) {
+      console.log(error.message);
     }
   };
 };

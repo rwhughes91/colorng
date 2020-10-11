@@ -3,23 +3,21 @@ import Header from '@components/layouts/Header/Header';
 import Layout from '@components/layouts/Layout';
 import Main from '@components/layouts/Main';
 import LikeButton from '@components/ui/buttons/LikeButton';
-import * as Constants from '@constants/index';
 import useFirebase from '@hooks/useFirebase';
 import { NavigationScreenProps } from '@navigations/GradientNavigator';
 import * as actions from '@store/actions/index';
-import { Globals, Mixins } from '@styles/index';
-import { Gradients, Gradient } from '@typeDefs/index';
+import { Globals } from '@styles/index';
+import { Gradients, Gradient, Colors } from '@typeDefs/index';
 import { capitalize } from '@utils/helpers';
-import { StatusBar } from 'expo-status-bar';
 import React, { useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
 type Props = NavigationScreenProps<'Detail'>;
 
-const calculateCutoff = () => {
-  return (Mixins.backdropHeight() - Constants.DEVICE_WIDTH) / 2 / Mixins.backdropHeight();
-};
+// const calculateCutoff = () => {
+//   return (Mixins.backdropHeight() - Constants.DEVICE_WIDTH) / 2 / Mixins.backdropHeight();
+// };
 
 const GradientDetailScreen: React.FC<Props> = (props) => {
   const firebase = useFirebase();
@@ -27,13 +25,26 @@ const GradientDetailScreen: React.FC<Props> = (props) => {
   const userGradients = useSelector<{ gradient: { userGradients: Gradients } }, Gradients>(
     (state) => state.gradient.userGradients
   );
-  const gradientColors = props.route.params.colors.map((color) =>
-    color.hex.startsWith('#') ? color.hex : `#${color.hex}`
+  const userColors = useSelector<{ gradient: { userColors: Colors } }, Colors>(
+    (state) => state.gradient.userColors
   );
+  const createdGradients = useSelector<{ gradient: { createdGradients: Gradients } }, Gradients>(
+    (state) => state.gradient.createdGradients
+  );
+  const gradientColors = props.route.params.colors.map((color) => color.hex);
   const description = props.route.params.description;
 
+  const colors = props.route.params.colors.map((color) => {
+    const focused = userColors.some((userColor) => color.hex === userColor.hex);
+    return { ...color, focused };
+  });
+
   let liked = false;
-  if (userGradients.filter((gradient) => gradient.id === props.route.params.id).length > 0) {
+  let disabled = false;
+  if (createdGradients.filter((gradient) => gradient.id === props.route.params.id).length > 0) {
+    liked = true;
+    disabled = true;
+  } else if (userGradients.filter((gradient) => gradient.id === props.route.params.id).length > 0) {
     liked = true;
   }
 
@@ -44,24 +55,25 @@ const GradientDetailScreen: React.FC<Props> = (props) => {
 
   const onRemoveGradientHandler = useCallback(() => {
     const gradientId = props.route.params.id;
-    dispatch(actions.removeGradientOrColor('userGradients', gradientId, firebase?.user?.uid));
+    if (gradientId) {
+      dispatch(actions.removeGradientOrColor('userGradients', gradientId, firebase?.user?.uid));
+    }
   }, [dispatch, props.route.params.id, firebase?.user?.uid]);
 
-  const colorWidth = (calculateCutoff() * 2) / gradientColors.length;
-  const gradientLocations = [];
-  for (let i = 1; i <= gradientColors.length; i++) {
-    gradientLocations.push(colorWidth * i + calculateCutoff() / 2);
-  }
+  // const colorWidth = (calculateCutoff() * 2) / gradientColors.length;
+  // const gradientLocations = [];
+  // for (let i = 1; i <= gradientColors.length; i++) {
+  //   gradientLocations.push(colorWidth * i + calculateCutoff() / 2);
+  // }
 
   return (
     <>
-      <StatusBar style="light" />
       <Layout
         whiteBackground
         gradient
         gradientColors={gradientColors}
         backdropPosition={-Globals.BACKDROP_TRANSLATE_SMALL}
-        gradientLocations={gradientLocations}
+        // gradientLocations={gradientLocations}
       >
         <View style={styles.container}>
           <Header
@@ -70,7 +82,7 @@ const GradientDetailScreen: React.FC<Props> = (props) => {
             styles={{ justifyContent: 'center' }}
           />
           <Main small>
-            <GradientDetailScrollView colors={props.route.params.colors} gradients={[]} />
+            <GradientDetailScrollView colors={colors} gradients={[]} />
           </Main>
         </View>
       </Layout>
@@ -78,6 +90,8 @@ const GradientDetailScreen: React.FC<Props> = (props) => {
         <LikeButton
           focused={liked}
           onPress={liked ? onRemoveGradientHandler : onSaveGradientHandler}
+          disabled={disabled}
+          icon={disabled && liked ? 'star' : 'heart'}
         />
       </View>
     </>

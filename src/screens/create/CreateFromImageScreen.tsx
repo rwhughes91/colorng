@@ -1,70 +1,121 @@
 import ColorExtract from '@components/ColorExtract/ColorExtract';
-import ColorListLayout from '@components/layouts/ColorListLayout';
-import CreateGradientHeader from '@components/layouts/Header/CreateGradientHeader';
+import CreateGradientLayout from '@components/layouts/CreateGradientLayout';
 import Layout from '@components/layouts/Layout';
-import Main from '@components/layouts/Main';
 import Loader from '@components/ui/Loader';
-import Button from '@components/ui/buttons/Button';
-import * as Constants from '@constants/index';
+import useFirebase from '@hooks/useFirebase';
 import Color from '@models/Color';
+import Gradient from '@models/Gradient';
 import { NavigationScreenProps } from '@navigations/CreateNavigator';
-import { Globals, Mixins } from '@styles/index';
-import React, { useCallback, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import Firebase from '@services/firebase/client';
+import * as actions from '@store/actions/index';
+import { Globals } from '@styles/index';
+import { Gradient as GradientType, Colors } from '@typeDefs/index';
+import * as FileSystem from 'expo-file-system';
+import React, { useCallback, useEffect, useState } from 'react';
+import { View, StyleSheet, Alert } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
+import { useDispatch, useSelector } from 'react-redux';
 
 type Props = NavigationScreenProps<'Image'>;
 
-const calculateCutoff = () => {
-  return (Mixins.backdropHeight() - Constants.DEVICE_WIDTH) / 2 / Mixins.backdropHeight();
-};
-
 const CreateFromImageScreen: React.FC<Props> = (props) => {
-  const [colorPalette, setColorPalette] = useState<any[]>([]);
-
-  const onColorPaletteGenerated = useCallback((palette: any[]) => {
-    const colors = palette.map((rgb) => {
-      const color = new Color(rgb);
-      return { name: color.name, hex: `#${color.hex}` };
-    });
-    setColorPalette(colors);
-  }, []);
-
-  const gradientColors = colorPalette.map((color) =>
-    color.hex.startsWith('#') ? color.hex : `#${color.hex}`
+  const dispatch = useDispatch();
+  const firebase = useFirebase();
+  const userColors = useSelector<{ gradient: { userColors: Colors } }, Colors>(
+    (state) => state.gradient.userColors
   );
-  const gradientLocations = [];
-  const colorWidth = (calculateCutoff() * 2) / gradientColors.length;
-  for (let i = 1; i <= gradientColors.length; i++) {
-    gradientLocations.push(colorWidth * i + calculateCutoff() / 2);
-  }
+  const [colorPalette, setColorPalette] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const onColorPaletteGenerated = useCallback(
+    (palette: any[]) => {
+      const colors = palette.map((rgb) => {
+        const color = new Color(rgb);
+        const focused = userColors.some((userColor) => color.hex === userColor.hex);
+        return { name: color.name, hex: color.hex, rgb, focused };
+      });
+      setColorPalette(colors);
+    },
+    [userColors]
+  );
+
+  useEffect(() => {
+    setColorPalette((prevState) => {
+      return prevState.map((colorP) => {
+        const focused = userColors.some((userColor) => colorP.hex === userColor.hex);
+        return { ...colorP, focused };
+      });
+    });
+  }, [userColors]);
+
+  const gradientColors = colorPalette.map((color) => color.hex);
 
   const onColorPaletteError = useCallback(() => {
     props.navigation.navigate('Create', { error: 'Could not generate palette from photo' });
   }, [props.navigation]);
 
-  let items = (
-    <>
-      <Loader />
-      <View style={[styles.imagePreview]}>
-        <ColorExtract
-          uri={props.route.params.uri}
-          onColorPalette={onColorPaletteGenerated}
-          onError={onColorPaletteError}
-        />
-      </View>
-    </>
+  const goBack = useCallback(async () => {
+    props.navigation.goBack();
+  }, [props.navigation]);
+
+  const createGradient = useCallback(async (userId: string, value: Gradient) => {
+    const gradientToAdd = {
+      ...value,
+      colors: value.colors.map((color) => {
+        return { name: color.name, hex: color.hex };
+      }),
+    };
+    try {
+      const id = await Firebase.addGradient(value);
+      await Firebase.appendUserData<GradientType>(userId, 'createdGradients', [
+        { ...gradientToAdd, id },
+      ]);
+      return { ...gradientToAdd, id };
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }, []);
+
+  const onSaveHandler = useCallback(
+    (name: string, description: string) => {
+      if (firebase?.user) {
+        setLoading(true);
+        const newGradient = new Gradient(
+          name,
+          colorPalette.map((rgb) => rgb.rgb),
+          0,
+          description
+        );
+        createGradient(firebase.user.uid, newGradient)
+          .then((gradientWithId) => {
+            dispatch(actions.appendList('createdGradients', { ...gradientWithId }));
+            FileSystem.deleteAsync(props.route.params.uri)
+              .then(() => {
+                setLoading(false);
+                Alert.alert(
+                  'Saved',
+                  'Your gradient has been created!',
+                  [{ text: 'OK', onPress: goBack }],
+                  {
+                    cancelable: false,
+                  }
+                );
+              })
+              .catch(() => {
+                setLoading(false);
+              });
+          })
+          .catch(() => {
+            setLoading(false);
+            Alert.alert(
+              'Error',
+              'There was an issue saving your gradient. Please check your internet connection'
+            );
+          });
+      }
+    },
+    [colorPalette, firebase?.user, dispatch, goBack, props.route.params.uri, createGradient]
   );
-  if (colorPalette.length > 0) {
-    items = (
-      <View style={{ flex: 1, justifyContent: 'flex-end' }}>
-        <ColorListLayout colors={colorPalette} title="Colors" icon />
-        <View style={styles.buttonContainer}>
-          <Button>Save</Button>
-        </View>
-      </View>
-    );
-  }
 
   return (
     <>
@@ -73,14 +124,25 @@ const CreateFromImageScreen: React.FC<Props> = (props) => {
         gradient
         backdropPosition={-Globals.BACKDROP_TRANSLATE_SMALL}
         gradientColors={gradientColors.length > 0 ? gradientColors : undefined}
-        gradientLocations={gradientLocations.length > 0 ? gradientLocations : undefined}
       >
-        <View style={styles.container}>
-          <CreateGradientHeader />
-          <Main small styles={{ paddingBottom: 10 }}>
-            {items}
-          </Main>
-        </View>
+        {colorPalette.length > 0 ? (
+          <CreateGradientLayout
+            gradientColors={colorPalette}
+            onSubmit={onSaveHandler}
+            loading={loading}
+          />
+        ) : (
+          <>
+            <Loader />
+            <View style={[styles.imagePreview]}>
+              <ColorExtract
+                uri={props.route.params.uri}
+                onColorPalette={onColorPaletteGenerated}
+                onError={onColorPaletteError}
+              />
+            </View>
+          </>
+        )}
       </Layout>
     </>
   );

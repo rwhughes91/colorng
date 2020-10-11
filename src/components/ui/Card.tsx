@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingTop: Spacing.SCALE_12,
     alignItems: 'center',
+    marginBottom: 10,
   },
   textStyles: {
     paddingBottom: 5,

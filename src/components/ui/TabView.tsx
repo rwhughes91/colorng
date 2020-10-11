@@ -29,25 +29,38 @@ const TabView: React.FC<Props> = (props) => {
 
   const [activeTab, setActiveTab] = useState(0);
 
-  const currentTabWidth = calculateWidth(props.tabs[activeTab].name);
+  const calculateTotalWidth = useCallback(
+    (index: number) => {
+      let totalWidth = 0;
+      for (let i = 0; i < index; i++) {
+        let addOn = 0;
+        if (index === 2) {
+          addOn = 0.75;
+        }
+        totalWidth = totalWidth + calculateWidth(props.tabs[i].name) + MARGIN_RIGHT + addOn;
+      }
+      return totalWidth;
+    },
+    [calculateWidth, props.tabs]
+  );
 
   const switchTabs = useCallback(
     (index: number) => {
       setActiveTab(index);
       Animated.parallel([
         Animated.timing(widthAnim, {
-          toValue: props.tabs[index].name.length * (fontSize / 1.9) + PADDING_HORIZONTAL,
+          toValue: calculateWidth(props.tabs[index].name),
           duration: 150,
           useNativeDriver: false,
         }),
         Animated.timing(slideAnim, {
-          toValue: (currentTabWidth + MARGIN_RIGHT) * index,
+          toValue: calculateTotalWidth(index),
           duration: 150,
           useNativeDriver: false,
         }),
       ]).start();
     },
-    [fontSize, props.tabs, widthAnim, slideAnim, currentTabWidth]
+    [props.tabs, widthAnim, slideAnim, calculateTotalWidth, calculateWidth]
   );
 
   return (
@@ -95,7 +108,7 @@ const styles = StyleSheet.create({
   },
   tabHeader: {
     alignSelf: 'stretch',
-    paddingVertical: moderateVerticalScale(12, 0.3),
+    paddingVertical: moderateVerticalScale(10, 0.3),
     paddingHorizontal: PADDING_HORIZONTAL / 2,
     marginRight: MARGIN_RIGHT,
     alignItems: 'center',
@@ -103,7 +116,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   componentContainer: {
-    marginTop: MARGIN_RIGHT * 1.5,
+    marginTop: 0,
     flex: 1,
   },
   activeBorder: {

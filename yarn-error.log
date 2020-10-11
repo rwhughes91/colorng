@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/Cellar/yarn/1.22.4/libexec/bin/yarn.js add @types/react-color-extractor
+  /usr/local/bin/node /usr/local/Cellar/yarn/1.22.4/libexec/bin/yarn.js add @types/react-native-color-wheel
 
 PATH: 
   /Users/roberthughes/Library/Android/sdk/platform-tools:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Users/roberthughes/Library/Android/sdk/platform-tools:/Users/roberthughes/anaconda3/bin:/Users/roberthughes/anaconda3/condabin:/Users/roberthughes/.npm-global/bin:/usr/local/mysql/bin:/usr/local/mongodb/bin:/Users/roberthughes/.npm-global/bin:/usr/local/mysql/bin:/usr/local/mongodb/bin
@@ -14,7 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@types%2freact-color-extractor: Not found
+  Error: https://registry.yarnpkg.com/@types%2freact-native-color-wheel: Not found
       at Request.params.callback [as _callback] (/usr/local/Cellar/yarn/1.22.4/libexec/lib/cli.js:66987:18)
       at Request.self.callback (/usr/local/Cellar/yarn/1.22.4/libexec/lib/cli.js:140748:22)
       at Request.emit (events.js:210:5)
@@ -53,7 +53,9 @@ npm manifest:
       "color-convert": "^2.0.1",
       "expo": "~38.0.8",
       "expo-constants": "~9.1.1",
+      "expo-file-system": "~9.0.1",
       "expo-font": "~8.2.1",
+      "expo-image-manipulator": "~8.2.1",
       "expo-image-picker": "~8.3.0",
       "expo-linear-gradient": "~8.2.1",
       "expo-sqlite": "~8.2.1",
@@ -62,6 +64,7 @@ npm manifest:
       "react": "~16.11.0",
       "react-dom": "~16.11.0",
       "react-native": "https://github.com/expo/react-native/archive/sdk-38.0.2.tar.gz",
+      "react-native-color-wheel": "^0.1.7",
       "react-native-gesture-handler": "~1.6.0",
       "react-native-reanimated": "~1.9.0",
       "react-native-safe-area-context": "~3.0.7",
@@ -69,6 +72,7 @@ npm manifest:
       "react-native-size-matters": "^0.3.1",
       "react-native-svg": "12.1.0",
       "react-native-web": "~0.11.7",
+      "react-native-webview": "9.4.0",
       "react-redux": "^7.2.1",
       "redux": "^4.0.5",
       "redux-thunk": "^2.3.0",
@@ -3666,6 +3670,11 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/colorette/-/colorette-1.2.1.tgz#4d0b921325c14faf92633086a536db6e89564b1b"
     integrity sha512-puCDz0CzydiSYOrnXpz/PKd69zRrribezjtE9yd4zvytoRc8+RY/KJPvtPFKZS3E3wP6neGyMe0vOTlHO5L3Pw==
   
+  colorsys@^1.0.17:
+    version "1.0.22"
+    resolved "https://registry.yarnpkg.com/colorsys/-/colorsys-1.0.22.tgz#e08459b297de7d4da4a53c26c3555f5a9609ad88"
+    integrity sha512-KCqF23oqkOD0IUCTLCl0obwGIMyeGFlNWuJ4oRRVKmawvKQeb3x5UvajVeH9AShZWU9hNaIhjXeTGw3iPNtl/Q==
+  
   colour@~0.7.1:
     version "0.7.1"
     resolved "https://registry.yarnpkg.com/colour/-/colour-0.7.1.tgz#9cb169917ec5d12c0736d3e8685746df1cadf778"
@@ -4317,6 +4326,11 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/escape-html/-/escape-html-1.0.3.tgz#0258eae4d3d0c0974de1c169188ef0051d1d1988"
     integrity sha1-Aljq5NPQwJdN4cFpGI7wBR0dGYg=
   
+  escape-string-regexp@2.0.0:
+    version "2.0.0"
+    resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-2.0.0.tgz#a30304e99daa32e23b2fd20f51babd07cffca344"
+    integrity sha512-UpzcLCXolUWcNu5HtVMHYdXJjArjsF9C0aNnquZYY4uW/Vu0miy5YoWvbV345HauVvcAUnpRuhMMcqTcGOY2+w==
+  
   escape-string-regexp@^1.0.5:
     version "1.0.5"
     resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz#1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
@@ -4679,6 +4693,11 @@ Lockfile:
     dependencies:
       fbjs "1.0.0"
       fontfaceobserver "^2.1.0"
+  
+  expo-image-manipulator@~8.2.1:
+    version "8.2.1"
+    resolved "https://registry.yarnpkg.com/expo-image-manipulator/-/expo-image-manipulator-8.2.1.tgz#8b9c9dc40615f045d49b3a3d53e41e3dbede1777"
+    integrity sha512-xz8gG6NWAEDzPe4rbHJCpCrNpfHWh5GBghBRRB6waZs3IMFTvGK/gUyor53xl+9VLi0f/ypGeWPyxl25GeBkMw==
   
   expo-image-picker@~8.3.0:
     version "8.3.0"
@@ -5633,7 +5652,7 @@ Lockfile:
       has "^1.0.3"
       side-channel "^1.0.2"
   
-  invariant@^2.2.2, invariant@^2.2.4:
+  invariant@2.2.4, invariant@^2.2.2, invariant@^2.2.4:
     version "2.2.4"
     resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
     integrity sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==
@@ -8266,6 +8285,13 @@ Lockfile:
       invariant "^2.2.4"
       use-subscription "^1.0.0"
   
+  react-native-color-wheel@^0.1.7:
+    version "0.1.7"
+    resolved "https://registry.yarnpkg.com/react-native-color-wheel/-/react-native-color-wheel-0.1.7.tgz#21c61faad37518abc2f534b50b67c435e523cdaa"
+    integrity sha512-LxkRHRpRZvjZag24lIFRNCczoUTIY0xCQgB54LEjrh0oeM0CvBq3LGx4vnT39n5tSbvBbXS2rkJxFcVn2HVKrQ==
+    dependencies:
+      colorsys "^1.0.17"
+  
   react-native-gesture-handler@~1.6.0:
     version "1.6.1"
     resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.6.1.tgz#678e2dce250ed66e93af409759be22cd6375dd17"
@@ -8326,6 +8352,14 @@ Lockfile:
       normalize-css-color "^1.0.2"
       prop-types "^15.6.0"
       react-timer-mixin "^0.13.4"
+  
+  react-native-webview@9.4.0:
+    version "9.4.0"
+    resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-9.4.0.tgz#108da34a6c7e1c032dcabc942b7e4947ca1d8028"
+    integrity sha512-BBOFUuza0p04+7fNi7TJmB0arpDJzGxHYwTCgI4vj5n/fl7u4jbm7ETp88mf7lo9lP6C6HGLo38KnEy1aXCQkg==
+    dependencies:
+      escape-string-regexp "2.0.0"
+      invariant "2.2.4"
   
   "react-native@https://github.com/expo/react-native/archive/sdk-38.0.2.tar.gz":
     version "0.62.2"

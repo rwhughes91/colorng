@@ -8,7 +8,7 @@ export enum GradientActionTypes {
   CLEAR_LISTS = 'CLEAR_LISTS',
 }
 
-export type Keys = 'userGradients' | 'userColors' | 'todaysGradients';
+export type Keys = 'userGradients' | 'userColors' | 'todaysGradients' | 'createdGradients';
 
 interface Action<T, U> {
   type: T;

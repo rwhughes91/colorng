@@ -7,7 +7,7 @@ import ColorItem from './ColorItem';
 import EmptyColorList from './EmptyColorList';
 
 interface Props {
-  items: ColorsType;
+  items: ColorsType & { focused?: boolean };
   fill?: boolean;
   styles?: StyleProp<ViewStyle>;
   textStylesView?: StyleProp<ViewStyle>;
@@ -18,31 +18,43 @@ interface Props {
   colorsOnly?: boolean;
   noRadius?: boolean;
   customIcon?: React.ReactNode;
+  listHeaderComponent?: any;
+  emptyStyles?: StyleProp<ViewStyle>;
+  checkmarkIcon?: boolean;
+  iconPress?: (x: any) => void;
+  emptyText?: { title: string; body: string };
 }
 
 const ColorList: React.FC<Props> = (props) => {
   const listItemStyles: object = props.styles || {};
   const containerStyles = { ...styles.colorList, flex: props.fill ? 1 : 0 };
+
   const renderItem: (x: any) => any = ({ item, index }) => {
     const colorStyles = {};
+    let borderStyles = {};
+    if (index === 0) {
+      borderStyles = { borderColor: Colors.LIGHT_GRAY, borderTopWidth: 1 };
+    }
     return (
       <ColorItem
         {...item}
         key={index}
         fill={props.fill}
         icon={props.icon}
-        styles={listItemStyles}
+        styles={[listItemStyles, borderStyles]}
         colorStyles={!props.colorsOnly && !props.noRadius && colorStyles}
         textStylesView={props.textStylesView}
         textStyles={props.textStyles}
         colorOnly={props.colorsOnly}
         customIcon={props.customIcon}
+        checkmarkIcon={props.checkmarkIcon}
+        iconPress={props.iconPress}
       />
     );
   };
 
   if (props.items.length === 0) {
-    return <EmptyColorList />;
+    return <EmptyColorList styles={props.emptyStyles} emptyText={props.emptyText} />;
   }
 
   return props.flatList ? (
@@ -51,6 +63,7 @@ const ColorList: React.FC<Props> = (props) => {
       contentContainerStyle={[containerStyles, { flex: 0 }]}
       renderItem={renderItem}
       keyExtractor={(_, index) => index.toString()}
+      ListHeaderComponent={props.listHeaderComponent}
     />
   ) : (
     <View style={[containerStyles, props.containerStyles]}>
@@ -63,8 +76,6 @@ const ColorList: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
   colorList: {
-    borderColor: Colors.LIGHT_GRAY,
-    borderTopWidth: 1,
     overflow: 'hidden',
   },
 });

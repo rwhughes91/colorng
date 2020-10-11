@@ -1,4 +1,5 @@
 import Color from '@components/Color/Color';
+import DeleteButton from '@components/ui/buttons/DeleteButton';
 import ForwardButton from '@components/ui/buttons/ForwardButton';
 import Text from '@components/ui/text/Text';
 import useNavigation from '@hooks/useNavigation';
@@ -13,6 +14,10 @@ interface Props extends Gradient {
   iconSize: number;
   styles?: StyleProp<ViewStyle>;
   topBorder?: boolean;
+  icon?: 'forward' | 'delete';
+  onItemPress?: () => void;
+  onIconPress?: (id: string) => void;
+  itemOpacity?: number;
 }
 
 const GradientListItem: React.FC<Props> = (props) => {
@@ -34,8 +39,8 @@ const GradientListItem: React.FC<Props> = (props) => {
   return (
     <TouchableOpacity
       style={[styles.gradientList, { borderTopWidth: props.topBorder ? 1 : 0 }]}
-      activeOpacity={0.9}
-      onPress={onClickHandler}
+      activeOpacity={props.itemOpacity || 0.9}
+      onPress={props.onItemPress || onClickHandler}
     >
       <View style={[styles.textContainer, { width: Globals.COLOR_SIZE * 5 }]}>
         <Text color={Colors.BLUE}>{capitalize(props.name)}</Text>
@@ -45,29 +50,25 @@ const GradientListItem: React.FC<Props> = (props) => {
         <View style={[styles.colorsContainer]}>
           {props.colors.map((color, i) => {
             const additionalStyles = {};
-            // if (i === 0) {
-            //   additionalStyles = {
-            //     borderTopLeftRadius: Globals.BORDER_RADIUS_SMALL,
-            //     borderBottomLeftRadius: Globals.BORDER_RADIUS_SMALL,
-            //   };
-            // }
-            // if (i === props.colors.length - 1) {
-            //   additionalStyles = {
-            //     borderTopRightRadius: Globals.BORDER_RADIUS_SMALL,
-            //     borderBottomRightRadius: Globals.BORDER_RADIUS_SMALL,
-            //   };
-            // }
             return (
               <Color
                 key={i}
-                color={color.hex.startsWith('#') ? color.hex : `#${color.hex}`}
+                color={color.hex}
                 colorStyles={{ position: 'relative', ...additionalStyles }}
               />
             );
           })}
         </View>
         <View style={styles.button}>
-          <ForwardButton size={Globals.COLOR_SIZE} iconSize={props.iconSize} />
+          {props.icon === 'delete' ? (
+            <DeleteButton
+              size={Globals.COLOR_SIZE}
+              iconSize={props.iconSize}
+              onPress={() => props.onIconPress && props.onIconPress(props.id || '')}
+            />
+          ) : (
+            <ForwardButton size={Globals.COLOR_SIZE} iconSize={props.iconSize} />
+          )}
         </View>
       </View>
     </TouchableOpacity>

@@ -28,7 +28,7 @@ export const HEADER_TRANSLATE_Y =
 export const BOX_SHADOW = shadowMixin('black', { height: 15, width: 4 }, 20, 0.15);
 
 // Main
-export const CONTENT_WIDTH = Constants.DEVICE_WIDTH * 0.85;
+export const CONTENT_WIDTH = Constants.DEVICE_WIDTH * 0.9;
 export const MAX_CONTENT_WIDTH = 500;
 
 // Color Squares
@@ -53,7 +53,7 @@ export const LIKE_BUTTON_STYLES: {
     backdropHeight() -
     BACKDROP_TRANSLATE_SMALL -
     HEADER_HEIGHT_WITH_STATUS_BAR +
-    moderateVerticalScale(10, 3),
+    (Platform.OS === 'ios' ? moderateVerticalScale(20) : 0),
   right: 10,
 };
 

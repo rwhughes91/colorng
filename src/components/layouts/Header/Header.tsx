@@ -19,6 +19,8 @@ interface Props {
   styles?: StyleProp<ViewStyle>;
   onSubmitEditingHandler?: (x?: any) => void;
   searchInputPlaceholder?: string;
+  searchInputOnChangeHandler?: (text: any) => void;
+  autoFocus?: boolean;
 }
 
 const Header: React.FC<Props> = (props) => {
@@ -34,6 +36,8 @@ const Header: React.FC<Props> = (props) => {
       {...props.showInputColors}
       onSubmitEditingHandler={props.onSubmitEditingHandler}
       placeholder={props.searchInputPlaceholder}
+      onChangeHandler={props.searchInputOnChangeHandler}
+      autoFocus={props.autoFocus}
     />
   );
   const items = [];

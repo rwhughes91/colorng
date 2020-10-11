@@ -17,6 +17,7 @@ interface Props {
   styles?: StyleProp<ViewStyle>;
   onPress: () => void;
   loading?: boolean;
+  disabled?: boolean;
 }
 
 const CardButton: React.FC<Props> = (props) => {
@@ -28,6 +29,7 @@ const CardButton: React.FC<Props> = (props) => {
         props.styles,
       ]}
       onPress={props.onPress}
+      disabled={props.disabled !== undefined ? props.disabled : props.loading}
     >
       {!props.loading ? (
         <HeaderText size={props.textSize || Typography.FONT_SIZE_16} color={props.textColor}>

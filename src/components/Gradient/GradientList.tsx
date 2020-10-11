@@ -16,9 +16,16 @@ interface Props {
   onScroll?: () => void;
   overScrollMode?: 'never' | 'auto' | 'always';
   scrollEventThrottle?: number;
+  emptyGradientStyles?: StyleProp<ViewStyle>;
+  emptyGradientText?: { title: string; body: string };
+  icon?: 'forward' | 'delete';
+  onItemPress?: () => void;
+  onIconPress?: (x: string) => void;
+  itemOpacity?: number;
 }
 
 const GradientList: React.FC<Props> = (props) => {
+  const { onItemPress, onIconPress } = props;
   const renderItem: ListRenderItem<Gradient> = useCallback(
     ({ item, index }) => {
       return (
@@ -26,10 +33,14 @@ const GradientList: React.FC<Props> = (props) => {
           {...item}
           iconSize={props.iconSize || (Mixins.sizeResponse(24, 28) as number)}
           topBorder={index === 0}
+          icon={props.icon}
+          onItemPress={onItemPress}
+          onIconPress={onIconPress}
+          itemOpacity={props.itemOpacity}
         />
       );
     },
-    [props.iconSize]
+    [props.iconSize, props.icon, onIconPress, onItemPress, props.itemOpacity]
   );
 
   const config = {
@@ -45,7 +56,13 @@ const GradientList: React.FC<Props> = (props) => {
   };
 
   if (props.gradients.length === 0) {
-    return <EmptyGradientList />;
+    return (
+      <EmptyGradientList
+        styles={props.emptyGradientStyles}
+        title={props.emptyGradientText?.title}
+        body={props.emptyGradientText?.body}
+      />
+    );
   }
 
   return !props.animated ? <FlatList {...config} /> : <Animated.FlatList {...config} />;

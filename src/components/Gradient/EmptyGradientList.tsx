@@ -2,16 +2,17 @@ import HeaderText from '@components/ui/text/HeaderText';
 import Text from '@components/ui/text/Text';
 import { Colors } from '@styles/index';
 import React from 'react';
-import { View } from 'react-native';
+import { StyleProp, View, ViewStyle } from 'react-native';
 
 interface Props {
   title?: string;
   body?: string;
+  styles?: StyleProp<ViewStyle>;
 }
 
 const EmptyGradientList: React.FC<Props> = (props) => {
   return (
-    <View>
+    <View style={props.styles}>
       <HeaderText color={Colors.PINK} styles={{ marginBottom: 6 }}>
         {props.title || 'No saved gradients'}
       </HeaderText>

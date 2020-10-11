@@ -1,9 +1,9 @@
 import HeartIcon from '@components/icons/HeartIcon';
+import CheckMarkButton from '@components/ui/buttons/CheckMarkButton';
 import Text from '@components/ui/text/Text';
 import useFirebase from '@hooks/useFirebase';
 import * as actions from '@store/actions/index';
 import { Colors, Globals } from '@styles/index';
-import { Colors as ColorsType } from '@typeDefs/index';
 import { capitalize } from '@utils/helpers';
 import React, { useCallback } from 'react';
 import {
@@ -15,7 +15,7 @@ import {
   Animated,
   TouchableOpacity,
 } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import Color from './Color';
 
@@ -30,19 +30,14 @@ interface Props {
   textStyles?: StyleProp<TextStyle>;
   colorOnly?: boolean;
   customIcon?: React.ReactNode;
+  focused?: boolean;
+  checkmarkIcon?: boolean;
+  iconPress?: (x: any) => void;
 }
 
 const ColorItem: React.FC<Props> = (props) => {
   const dispatch = useDispatch();
   const firebase = useFirebase();
-  const userColors = useSelector<{ gradient: { userColors: ColorsType } }, ColorsType>(
-    (state) => state.gradient.userColors
-  );
-
-  let focused = false;
-  if (userColors.findIndex((item) => item.hex === props.hex) !== -1) {
-    focused = true;
-  }
 
   const onColorSaveHandler = useCallback(() => {
     dispatch(
@@ -61,7 +56,7 @@ const ColorItem: React.FC<Props> = (props) => {
   return (
     <Animated.View style={[styles.container, { flex: props.fill ? 1 : 0 }, props.styles]}>
       <Color
-        color={props.hex.startsWith('#') ? props.hex : `#${props.hex}`}
+        color={props.hex}
         colorStyles={[props.colorStyles, { opacity: 1 }]}
         fill={props.fill}
         scaleVertical
@@ -73,14 +68,29 @@ const ColorItem: React.FC<Props> = (props) => {
           </Text>
           {props.icon && (
             <TouchableOpacity
-              onPress={focused ? onColorRemoverHandler : onColorSaveHandler}
+              onPress={props.focused ? onColorRemoverHandler : onColorSaveHandler}
               activeOpacity={Globals.ACTIVE_OPACITY}
               style={{ padding: 10 }}
             >
-              <HeartIcon size={24} focused={focused} color={focused ? Colors.PINK : Colors.GRAY} />
+              <HeartIcon
+                size={24}
+                focused={props.focused || false}
+                color={props.focused ? Colors.PINK : Colors.GRAY}
+              />
             </TouchableOpacity>
           )}
           {props.customIcon}
+          {props.checkmarkIcon && (
+            <CheckMarkButton
+              size={Globals.COLOR_SIZE * 0.9}
+              iconSize={24}
+              selected={props.focused}
+              onPress={() =>
+                props.iconPress &&
+                props.iconPress({ name: props.name, hex: props.hex, id: props.hex })
+              }
+            />
+          )}
         </View>
       )}
     </Animated.View>

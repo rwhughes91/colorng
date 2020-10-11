@@ -15,8 +15,9 @@ export default class Color implements ColorType {
   inten?: 'dark' | 'light' | 'semi-dark';
 
   constructor(rgb: RGB, name?: string) {
+    const hex = convert.rgb.hex(rgb);
     this.name = name || ntc(convert.rgb.hex(rgb)).colorName.toLowerCase();
-    this.hex = convert.rgb.hex(rgb);
+    this.hex = hex.startsWith('#') ? hex : `#${hex}`;
     this.rgb = Color.objectify(rgb, 'rgb');
     this.hsl = Color.objectify(convert.rgb.hsl(rgb), 'hsl');
     this.hsv = Color.objectify(convert.rgb.hsv(rgb), 'hsv');
@@ -28,7 +29,7 @@ export default class Color implements ColorType {
 
   static objectify(data: number[], keys: string) {
     if (data.length !== keys.length) {
-      throw new Error('Keys array length must equal data array length');
+      throw new Error(`data length ${data} does not match keys length ${keys}`);
     }
     const obj: any = {};
     for (let i = 0; i < keys.length; i++) {
@@ -36,5 +37,9 @@ export default class Color implements ColorType {
     }
     obj.value = `${keys}(${data.join(', ')})`;
     return obj;
+  }
+
+  static hexToRgb(hex: string) {
+    return convert.hex.rgb(hex);
   }
 }

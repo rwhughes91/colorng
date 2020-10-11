@@ -6,7 +6,7 @@ import { View, StyleProp, ViewStyle } from 'react-native';
 
 interface Props {
   title?: string;
-  colors: ColorsType;
+  colors: ColorsType & { focused?: boolean };
   styles?: StyleProp<ViewStyle>;
   containerStyles?: StyleProp<ViewStyle>;
   icon?: boolean;

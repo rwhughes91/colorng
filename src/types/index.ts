@@ -16,7 +16,7 @@ export type RGB = [number, number, number];
 export type Colors = Color[];
 
 export interface Gradient {
-  id: string;
+  id?: string;
   name: string;
   likes: number;
   colorSearch: string[];

@@ -17,6 +17,9 @@ interface Props {
   onSubmitEditingHandler?: (x: string) => void;
   styles?: StyleProp<ViewStyle>;
   inputStyles?: StyleProp<TextStyle>;
+  onChangeHandler?: (text: any) => void;
+  value?: string;
+  autoFocus?: boolean;
 }
 
 const SearchInput: React.FC<Props> = (props) => {
@@ -61,8 +64,12 @@ const SearchInput: React.FC<Props> = (props) => {
           onSubmitEditing={onSubmitEditingHandler}
           ref={textInputRef}
           placeholderTextColor={props.placeholderColor}
-          autoFocus={!!customOnSubmitEditingHandler}
+          autoFocus={
+            props.autoFocus !== undefined ? props.autoFocus : !!customOnSubmitEditingHandler
+          }
           pointerEvents={!customOnSubmitEditingHandler ? 'none' : 'auto'}
+          onChange={props.onChangeHandler}
+          value={props.value}
         />
       </LinearGradient>
     </TouchableOpacity>

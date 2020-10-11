@@ -4,4 +4,6 @@ export {
   fetchUsersGradientsAndColors,
   addGradientOrColor,
   removeGradientOrColor,
+  createGradient,
+  deleteGradient,
 } from './asyncGradient';
