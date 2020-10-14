@@ -1,20 +1,13 @@
 import HeartIcon from '@components/icons/HeartIcon';
 import CheckMarkButton from '@components/ui/buttons/CheckMarkButton';
 import Text from '@components/ui/text/Text';
+import * as constants from '@constants/index';
 import useFirebase from '@hooks/useFirebase';
 import * as actions from '@store/actions/index';
 import { Colors, Globals } from '@styles/index';
 import { capitalize } from '@utils/helpers';
 import React, { useCallback } from 'react';
-import {
-  View,
-  StyleSheet,
-  StyleProp,
-  ViewStyle,
-  TextStyle,
-  Animated,
-  TouchableOpacity,
-} from 'react-native';
+import { View, StyleSheet, StyleProp, ViewStyle, TextStyle, TouchableOpacity } from 'react-native';
 import { useDispatch } from 'react-redux';
 
 import Color from './Color';
@@ -33,33 +26,29 @@ interface Props {
   focused?: boolean;
   checkmarkIcon?: boolean;
   iconPress?: (x: any) => void;
+  onSaveColorHandler: (x: string, y: string, z: string) => void;
 }
 
 const ColorItem: React.FC<Props> = (props) => {
   const dispatch = useDispatch();
   const firebase = useFirebase();
 
+  const { onSaveColorHandler } = props;
   const onColorSaveHandler = useCallback(() => {
-    dispatch(
-      actions.addGradientOrColor(
-        'userColors',
-        { name: props.name, hex: props.hex, id: props.hex },
-        firebase?.user?.uid
-      )
-    );
-  }, [dispatch, props.name, props.hex, firebase?.user?.uid]);
+    onSaveColorHandler(props.name, props.hex, props.hex);
+  }, [props.name, props.hex, onSaveColorHandler]);
 
   const onColorRemoverHandler = useCallback(() => {
     dispatch(actions.removeGradientOrColor('userColors', props.hex, firebase?.user?.uid));
   }, [dispatch, props.hex, firebase?.user?.uid]);
 
   return (
-    <Animated.View style={[styles.container, { flex: props.fill ? 1 : 0 }, props.styles]}>
+    <View style={[styles.container, props.styles, props.fill ? { flex: 1 } : null]}>
       <Color
         color={props.hex}
         colorStyles={[props.colorStyles, { opacity: 1 }]}
+        round
         fill={props.fill}
-        scaleVertical
       />
       {!props.colorOnly && (
         <View style={[styles.TextContainer, props.textStylesView]}>
@@ -93,13 +82,21 @@ const ColorItem: React.FC<Props> = (props) => {
           )}
         </View>
       )}
-    </Animated.View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
+    overflow: 'hidden',
+    borderColor: Colors.LIGHT_GRAY,
+    borderBottomWidth: 1,
+    alignItems: 'center',
+    height:
+      constants.DEVICE_HEIGHT > Globals.HEIGHT_BREAKPOINT
+        ? Globals.MAX_COLOR_SIZE + 6
+        : Globals.COLOR_SIZE + 10,
   },
   TextContainer: {
     flex: 1,
@@ -108,8 +105,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingLeft: 20,
     paddingRight: 10,
-    borderColor: Colors.LIGHT_GRAY,
-    borderBottomWidth: 1,
   },
 });
 

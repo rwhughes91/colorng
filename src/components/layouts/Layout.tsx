@@ -1,4 +1,5 @@
 import BackDrop from '@components/ui/BackDrop';
+import { useIsFocused } from '@react-navigation/native';
 import { HeaderHeightContext } from '@react-navigation/stack';
 import { Colors } from '@styles/index';
 import Constants from 'expo-constants';
@@ -22,6 +23,7 @@ interface Props {
 }
 
 const Layout: React.FC<Props> = (props) => {
+  const isFocused = useIsFocused();
   const headerHeightContext = useContext(HeaderHeightContext);
   const headerHeight = headerHeightContext || 0;
   const layoutStyles = { ...styles.layout };
@@ -31,7 +33,9 @@ const Layout: React.FC<Props> = (props) => {
 
   return (
     <>
-      <StatusBar style={props.statusBarColor || 'dark'} />
+      {isFocused && (
+        <StatusBar style={props.statusBarColor || 'dark'} backgroundColor="transparent" />
+      )}
       <View style={layoutStyles}>
         {props.gradient && (
           <BackDrop

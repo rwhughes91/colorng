@@ -1,5 +1,5 @@
 import { WhereFilterOp } from '@google-cloud/firestore';
-import Gradient from '@models/Gradient';
+import { Gradient } from '@typeDefs/index';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
@@ -155,10 +155,18 @@ export default class Firebase {
     return res.id;
   }
 
-  static async removeGradient(id: string): Promise<boolean> {
+  static async removeGradient(id: string, userId: string): Promise<boolean> {
     try {
-      await this.db.collection('gradients').doc(id).delete();
-      return true;
+      const doc = await this.db.collection('gradients').doc(id).get();
+      if (doc.exists) {
+        const data = doc.data();
+        if (data?.createdBy && data?.createdBy === userId) {
+          await this.db.collection('gradients').doc(id).delete();
+          return true;
+        }
+        throw new Error('You cannot delete a gradient that you did not create.');
+      }
+      throw new Error('Doc does not exist.');
     } catch (error) {
       throw new Error(error.message);
     }

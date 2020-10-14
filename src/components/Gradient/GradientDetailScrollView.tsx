@@ -1,8 +1,10 @@
+import AnimatedHeader from '@components/Gradient/detail/AnimatedHeader';
 import ColorListLayout from '@components/layouts/ColorListLayout';
+import Main from '@components/layouts/Main';
 import HeaderLabelText from '@components/texts/HeaderLabelText';
-import { Colors as ColorsType, Gradients } from '@typeDefs/index';
-import React from 'react';
-import { View } from 'react-native';
+import { Colors as ColorsType, Gradients, Gradient } from '@typeDefs/index';
+import React, { useCallback } from 'react';
+import { Animated, View } from 'react-native';
 import { moderateVerticalScale } from 'react-native-size-matters';
 
 import GradientList from './GradientList';
@@ -11,17 +13,45 @@ interface Props {
   colors: ColorsType;
   gradients: Gradients;
   scrollEnabled?: boolean;
+  onScroll?: any;
+  title: string;
+  description?: string;
+  animatedValue: Animated.Value;
+  loading?: boolean;
+  onItemPress?: (gradient: Gradient) => void;
+  onSaveColorHandler: (x: string, y: string, z: string) => void;
 }
 
 const GradientDetailScrollView: React.FC<Props> = (props) => {
+  const { onItemPress } = props;
+  const onReplaceHandler = useCallback(
+    (gradient: Gradient) => {
+      onItemPress && onItemPress(gradient);
+    },
+    [onItemPress]
+  );
+
   const header = (
     <View>
-      <ColorListLayout colors={props.colors} title="Colors" styles={{ marginTop: 0 }} icon />
-      {props.gradients.length > 0 && (
-        <HeaderLabelText styles={{ marginTop: moderateVerticalScale(15) }}>
-          Other Gradients by This User
-        </HeaderLabelText>
-      )}
+      <AnimatedHeader
+        title={{ text: props.title, location: 'above' }}
+        description={props.description}
+        animatedValue={props.animatedValue}
+      />
+      <Main small styles={{ width: '100%' }}>
+        <ColorListLayout
+          colors={props.colors}
+          title="Colors"
+          styles={{ marginTop: 0 }}
+          icon
+          onSaveColorHandler={props.onSaveColorHandler}
+        />
+        {props.gradients.length > 0 && (
+          <HeaderLabelText styles={{ marginTop: moderateVerticalScale(15) }}>
+            Other gradients you may like
+          </HeaderLabelText>
+        )}
+      </Main>
     </View>
   );
   return props.gradients.length > 0 ? (
@@ -30,9 +60,32 @@ const GradientDetailScrollView: React.FC<Props> = (props) => {
       listHeaderComponent={header}
       styles={{ paddingTop: 3 }}
       scrollEnabled={props.scrollEnabled}
+      animated
+      overScrollMode="never"
+      scrollEventThrottle={16}
+      onScroll={props.onScroll}
+      onItemPress={onReplaceHandler}
     />
   ) : (
-    header
+    <View style={{ flex: 1 }}>
+      <AnimatedHeader
+        title={{ text: props.title, location: 'above' }}
+        description={props.description}
+        animatedValue={props.animatedValue}
+      />
+      <Main small styles={{ flex: 1 }}>
+        <ColorListLayout
+          colors={props.colors}
+          title="Colors"
+          styles={{ marginTop: 0 }}
+          mainContainer={{ flex: 1 }}
+          icon
+          flatList
+          loading={props.loading}
+          onSaveColorHandler={props.onSaveColorHandler}
+        />
+      </Main>
+    </View>
   );
 };
 

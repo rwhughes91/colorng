@@ -7,7 +7,7 @@ import { NavigationScreenProps } from '@navigations/GradientNavigator';
 import * as actions from '@store/actions/index';
 import { Colors, Globals } from '@styles/index';
 import { Gradients } from '@typeDefs/index';
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -30,20 +30,31 @@ const GradientSearch: React.FC<Props> = () => {
     [firebase?.user, dispatch]
   );
 
-  const onDeleteHandler = useCallback(
-    (id: string) => {
+  const onDeleteItemHandler = useCallback(
+    (gradient: any) => {
       Alert.alert('Are your sure?', 'This is permanent.', [
         { text: 'Cancel' },
         {
           text: 'Confirm',
           onPress: () => {
-            deleteGradient(id);
+            deleteGradient(gradient.id);
           },
         },
       ]);
     },
     [deleteGradient]
   );
+
+  const emptyGradientText = useMemo(() => {
+    return {
+      title: 'No created gradients',
+      body: 'You can create gradients in the previous page!',
+    };
+  }, []);
+
+  const emptyGradientStyles = useMemo(() => {
+    return { marginTop: 10 };
+  }, []);
 
   return (
     <Layout header whiteBackground>
@@ -63,14 +74,9 @@ const GradientSearch: React.FC<Props> = () => {
           <GradientList
             gradients={createdGradients}
             icon="delete"
-            onItemPress={() => {}}
-            onIconPress={onDeleteHandler}
-            itemOpacity={1}
-            emptyGradientText={{
-              title: 'No created gradients',
-              body: 'You can create gradients in the previous page!',
-            }}
-            emptyGradientStyles={{ marginTop: 10 }}
+            onItemPress={onDeleteItemHandler}
+            emptyGradientText={emptyGradientText}
+            emptyGradientStyles={emptyGradientStyles}
           />
         </View>
       </View>

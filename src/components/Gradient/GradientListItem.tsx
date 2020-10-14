@@ -2,22 +2,23 @@ import Color from '@components/Color/Color';
 import DeleteButton from '@components/ui/buttons/DeleteButton';
 import ForwardButton from '@components/ui/buttons/ForwardButton';
 import Text from '@components/ui/text/Text';
+import * as Constants from '@constants/index';
 import useNavigation from '@hooks/useNavigation';
 import { Colors, Globals } from '@styles/index';
 import { Gradient } from '@typeDefs/index';
 import { capitalize } from '@utils/helpers';
 import React, { useCallback } from 'react';
 import { View, StyleSheet, StyleProp, ViewStyle, TouchableOpacity } from 'react-native';
-import { moderateVerticalScale } from 'react-native-size-matters';
 
 interface Props extends Gradient {
   iconSize: number;
   styles?: StyleProp<ViewStyle>;
   topBorder?: boolean;
   icon?: 'forward' | 'delete';
-  onItemPress?: () => void;
+  onItemPress?: (gradient: any) => void;
   onIconPress?: (id: string) => void;
   itemOpacity?: number;
+  replace?: boolean;
 }
 
 const GradientListItem: React.FC<Props> = (props) => {
@@ -32,19 +33,42 @@ const GradientListItem: React.FC<Props> = (props) => {
     },
   });
 
+  const { onItemPress } = props;
   const onClickHandler = useCallback(() => {
-    navigateToDetail();
-  }, [navigateToDetail]);
+    if (onItemPress) {
+      onItemPress({
+        name: props.name,
+        likes: props.likes,
+        description: props.description,
+        colors: props.colors,
+        id: props.id,
+      });
+    } else {
+      navigateToDetail();
+    }
+  }, [
+    navigateToDetail,
+    onItemPress,
+    props.colors,
+    props.name,
+    props.likes,
+    props.description,
+    props.id,
+  ]);
 
   return (
     <TouchableOpacity
       style={[styles.gradientList, { borderTopWidth: props.topBorder ? 1 : 0 }]}
       activeOpacity={props.itemOpacity || 0.9}
-      onPress={props.onItemPress || onClickHandler}
+      onPress={onClickHandler}
     >
-      <View style={[styles.textContainer, { width: Globals.COLOR_SIZE * 5 }]}>
+      <View
+        style={[
+          styles.textContainer,
+          { width: Globals.COLOR_SIZE * 5, maxWidth: Globals.MAX_COLOR_SIZE * 5 },
+        ]}
+      >
         <Text color={Colors.BLUE}>{capitalize(props.name)}</Text>
-        {/* <Text color={Colors.PINK}>{`${props.likes} ${props.likes === 1 ? 'like' : 'likes'}`}</Text> */}
       </View>
       <View style={styles.gradientContainer}>
         <View style={[styles.colorsContainer]}>
@@ -54,7 +78,10 @@ const GradientListItem: React.FC<Props> = (props) => {
               <Color
                 key={i}
                 color={color.hex}
-                colorStyles={{ position: 'relative', ...additionalStyles }}
+                colorStyles={[
+                  { position: 'relative', ...additionalStyles },
+                  { marginHorizontal: -0.1 },
+                ]}
               />
             );
           })}
@@ -81,12 +108,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderColor: Colors.LIGHT_GRAY,
     borderBottomWidth: 1,
-    paddingBottom: moderateVerticalScale(14),
-    paddingTop: moderateVerticalScale(6),
+    paddingBottom: 14,
+    paddingTop: 6,
   },
   gradientContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    height:
+      Constants.DEVICE_HEIGHT > Globals.HEIGHT_BREAKPOINT
+        ? Globals.MAX_COLOR_SIZE
+        : Globals.COLOR_SIZE,
   },
   textContainer: {
     flexDirection: 'row',

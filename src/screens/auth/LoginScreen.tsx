@@ -1,6 +1,7 @@
 import Layout from '@components/layouts/Layout';
 import Form from '@components/ui/Form';
 import HeaderText from '@components/ui/text/HeaderText';
+import * as Constants from '@constants/index';
 import useForm from '@hooks/useForm';
 import { NavigationScreenProps } from '@navigations/AuthNavigator';
 import Firebase from '@services/firebase/client';
@@ -51,7 +52,12 @@ const LoginScreen: React.FC<Props> = () => {
     <Layout>
       <View style={styles.container}>
         <View style={styles.header}>
-          <HeaderText color={Colors.PINK}>Login</HeaderText>
+          <HeaderText
+            color={Colors.PINK}
+            styles={{ marginTop: Constants.DEVICE_HEIGHT > Globals.HEIGHT_BREAKPOINT ? 25 : 0 }}
+          >
+            Login
+          </HeaderText>
         </View>
         <Form
           loading={loading}
@@ -84,7 +90,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: Globals.CONTENT_WIDTH,
-    maxWidth: Globals.MAX_CONTENT_WIDTH,
+    maxWidth: Globals.MAX_CONTENT_WIDTH_THIN,
     alignItems: 'center',
   },
   header: {

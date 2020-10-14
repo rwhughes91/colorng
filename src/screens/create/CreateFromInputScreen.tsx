@@ -138,10 +138,12 @@ const CreateFromInputScreen: React.FC<Props> = (props) => {
                 color={color.hex}
                 fill
                 colorStyles={{
-                  borderTopLeftRadius: index === 0 ? 3 : 0,
-                  borderBottomLeftRadius: index === 0 ? 3 : 0,
-                  borderTopRightRadius: index === selectedColors.length - 1 ? 3 : 0,
-                  borderBottomRightRadius: index === selectedColors.length - 1 ? 3 : 0,
+                  borderTopLeftRadius: index === 0 ? Globals.BORDER_RADIUS_SMALL : 0,
+                  borderBottomLeftRadius: index === 0 ? Globals.BORDER_RADIUS_SMALL : 0,
+                  borderTopRightRadius:
+                    index === selectedColors.length - 1 ? Globals.BORDER_RADIUS_SMALL : 0,
+                  borderBottomRightRadius:
+                    index === selectedColors.length - 1 ? Globals.BORDER_RADIUS_SMALL : 0,
                 }}
               />
             </TouchableOpacity>
@@ -189,11 +191,11 @@ const CreateFromInputScreen: React.FC<Props> = (props) => {
               flatList
               checkmarkIcon
               iconPress={onIconPressHandler}
-              fill
               emptyText={{
                 title: 'No colors',
                 body: 'Try clearing your filter and searching more generally',
               }}
+              onSaveColorHandler={() => {}}
             />
           </View>
         ) : (
@@ -235,8 +237,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   colorContainer: {
+    alignSelf: 'center',
     flexDirection: 'row',
-    height: Globals.CONTENT_WIDTH / 5,
+    width: Globals.CONTENT_WIDTH,
+    maxWidth: Globals.MAX_CONTENT_WIDTH_THIN,
+    height:
+      Globals.MAX_CONTENT_WIDTH_THIN > Globals.CONTENT_WIDTH
+        ? Globals.CONTENT_WIDTH / 5
+        : Globals.MAX_CONTENT_WIDTH_THIN / 5,
   },
   row: {
     flexDirection: 'row',

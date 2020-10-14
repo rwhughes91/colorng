@@ -5,7 +5,7 @@ import { capitalize, itemsInArray } from '@utils/helpers';
 
 import * as actions from './index';
 
-type Dispatch = (action: any) => void;
+type Dispatch = (action: any, state?: any) => void;
 
 interface Thunk {
   (x?: any): Dispatch;
@@ -229,6 +229,7 @@ export const createGradient = (userId: string, value: Gradient): Dispatch => {
       colors: value.colors.map((color) => {
         return { name: color.name, hex: color.hex };
       }),
+      createdBy: userId,
     };
     try {
       const id = await Firebase.addGradient(value);
@@ -249,7 +250,7 @@ export const deleteGradient = (userId: string, id: string): Dispatch => {
     }
     try {
       dispatch(actions.filterList('createdGradients', id));
-      const res = await Firebase.removeGradient(userId);
+      const res = await Firebase.removeGradient(id, userId);
       if (res) {
         await Firebase.removeItemFromUsersArray(userId, 'createdGradients', id);
       }

@@ -1,4 +1,6 @@
 import SearchInput from '@components/ui/inputs/SearchInput';
+import * as Constants from '@constants/index';
+import { Globals } from '@styles/index';
 import React, { useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
 
@@ -20,7 +22,15 @@ const CreateGradientHeader: React.FC<Props> = (props) => {
   const onSubmitEditingHandler = useCallback(() => {}, []);
 
   return (
-    <View style={[styles.header, { justifyContent: 'space-around' }]}>
+    <View
+      style={[
+        styles.header,
+        { justifyContent: 'space-around' },
+        Constants.DEVICE_HEIGHT > Globals.HEIGHT_BREAKPOINT
+          ? { marginTop: Globals.HEADER_MARGINS / 2, minHeight: 150 }
+          : null,
+      ]}
+    >
       <SearchInput
         noIcon
         inputStyles={headerStyles.input}

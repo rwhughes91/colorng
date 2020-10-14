@@ -25,7 +25,9 @@ const BackDrop: React.FC<Props> = (props) => {
     borderRadius:
       props.borderRadius === 0
         ? props.borderRadius
-        : props.borderRadius || Mixins.backdropHeight() / 2,
+        : props.borderRadius || Constants.DEVICE_HEIGHT > Globals.HEIGHT_BREAKPOINT
+        ? 0
+        : Mixins.backdropHeight() / 2,
     transform: [
       { translateY: props.top !== undefined ? props.top : -Globals.HEADER_TRANSLATE_Y },
       { rotate: '-90deg' },

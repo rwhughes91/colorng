@@ -1,6 +1,7 @@
 import Layout from '@components/layouts/Layout';
 import Form from '@components/ui/Form';
 import HeaderText from '@components/ui/text/HeaderText';
+import * as Constants from '@constants/index';
 import useForm from '@hooks/useForm';
 import { NavigationScreenProps } from '@navigations/AuthNavigator';
 import Firebase from '@services/firebase/client';
@@ -62,7 +63,12 @@ const SignUpScreen: React.FC<Props> = () => {
     <Layout>
       <View style={styles.container}>
         <View style={styles.header}>
-          <HeaderText color={Colors.PINK}>Sign Up</HeaderText>
+          <HeaderText
+            color={Colors.PINK}
+            styles={{ marginTop: Constants.DEVICE_HEIGHT > Globals.HEIGHT_BREAKPOINT ? 25 : 0 }}
+          >
+            Sign Up
+          </HeaderText>
         </View>
         <Form
           loading={loading}

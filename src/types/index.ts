@@ -22,6 +22,7 @@ export interface Gradient {
   colorSearch: string[];
   description?: string;
   colors: Colors;
+  createdBy?: string;
 }
 
 export type Gradients = Gradient[];

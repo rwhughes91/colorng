@@ -11,11 +11,15 @@ interface Props {
   containerStyles?: StyleProp<ViewStyle>;
   icon?: boolean;
   customIcon?: React.ReactNode;
+  flatList?: boolean;
+  mainContainer?: StyleProp<ViewStyle>;
+  loading?: boolean;
+  onSaveColorHandler: (x: string, y: string, z: string) => void;
 }
 
 const ColorListLayout: React.FC<Props> = (props) => {
   return (
-    <View>
+    <View style={props.mainContainer}>
       {props.title && <HeaderLabelText>{props.title}</HeaderLabelText>}
       <ColorList
         items={props.colors}
@@ -23,6 +27,9 @@ const ColorListLayout: React.FC<Props> = (props) => {
         containerStyles={props.containerStyles}
         icon={props.icon}
         customIcon={props.customIcon}
+        flatList={props.flatList}
+        loading={props.loading}
+        onSaveColorHandler={props.onSaveColorHandler}
       />
     </View>
   );

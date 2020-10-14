@@ -4,12 +4,14 @@ import LoginIcon from '@components/icons/LoginIcon';
 import Header from '@components/layouts/Header/Header';
 import Layout from '@components/layouts/Layout';
 import TabView from '@components/ui/TabView';
+import * as Constants from '@constants/index';
 import useFirebase from '@hooks/useFirebase';
 import { NavigationScreenProps } from '@navigations/SavedNavigator';
 import { Colors, Globals, Mixins } from '@styles/index';
 import { Gradients, Colors as ColorsType } from '@typeDefs/index';
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useMemo } from 'react';
 import { View, StyleSheet } from 'react-native';
+import { moderateVerticalScale } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 
 type Props = NavigationScreenProps<'Home'>;
@@ -50,14 +52,22 @@ const SavedScreen: React.FC<Props> = (props) => {
     }
   }, [firebase?.user, props.navigation]);
 
+  const header = useMemo(() => {
+    return <View style={{ height: 35 }} />;
+  }, []);
+
+  const emptyStyles = useMemo(() => {
+    return { marginTop: 35 };
+  }, []);
+
   const tabs = [
     {
       name: 'Gradients',
       component: (
         <GradientList
           gradients={savedGradients}
-          listHeaderComponent={<View style={{ height: 35 }} />}
-          emptyGradientStyles={{ marginTop: 35 }}
+          listHeaderComponent={header}
+          emptyGradientStyles={emptyStyles}
         />
       ),
     },
@@ -70,8 +80,8 @@ const SavedScreen: React.FC<Props> = (props) => {
           })}
           icon
           flatList
-          listHeaderComponent={<View style={{ height: 35 }} />}
-          emptyStyles={{ marginTop: 35 }}
+          listHeaderComponent={header}
+          emptyStyles={emptyStyles}
         />
       ),
     },
@@ -83,8 +93,8 @@ const SavedScreen: React.FC<Props> = (props) => {
       component: (
         <GradientList
           gradients={createdGradients}
-          listHeaderComponent={<View style={{ height: 35 }} />}
-          emptyGradientStyles={{ marginTop: 35 }}
+          listHeaderComponent={header}
+          emptyGradientStyles={emptyStyles}
           emptyGradientText={{
             title: 'No created gradients',
             body: 'You can create your own gradients! Just go to the create tab below.',
@@ -95,22 +105,21 @@ const SavedScreen: React.FC<Props> = (props) => {
   }
 
   return (
-    <>
-      <Layout
-        gradient
-        gradientColors={['white', 'white']}
-        backdropPosition={backdropPosition}
-        cover
-      >
-        <Header
-          title={{ text: 'Saved Colors', location: 'above', color: Colors.PINK }}
-          styles={{ marginBottom: 10 }}
-        />
-        <View style={styles.container}>
-          <TabView tabs={tabs} />
-        </View>
-      </Layout>
-    </>
+    <Layout gradient gradientColors={['white', 'white']} backdropPosition={backdropPosition} cover>
+      <Header
+        title={{ text: 'Saved Colors', location: 'above', color: Colors.PINK }}
+        styles={[
+          {
+            marginBottom:
+              Constants.DEVICE_HEIGHT > Globals.HEIGHT_BREAKPOINT ? moderateVerticalScale(30) : 10,
+          },
+          Constants.DEVICE_HEIGHT > Globals.HEIGHT_BREAKPOINT ? { justifyContent: 'center' } : null,
+        ]}
+      />
+      <View style={styles.container}>
+        <TabView tabs={tabs} />
+      </View>
+    </Layout>
   );
 };
 

@@ -2,7 +2,7 @@ import Text from '@components/ui/text/Text';
 import { Colors, Globals, Typography } from '@styles/index';
 import React, { useState, useCallback, useRef } from 'react';
 import { View, StyleSheet, TouchableOpacity, Animated, StyleProp, ViewStyle } from 'react-native';
-import { moderateVerticalScale } from 'react-native-size-matters';
+import { moderateVerticalScale, moderateScale } from 'react-native-size-matters';
 
 interface Props {
   tabs: { name: string; component: React.ReactNode }[];
@@ -11,8 +11,8 @@ interface Props {
 }
 
 // const BORDER_SIZE = 90;
-const MARGIN_RIGHT = 25;
-const PADDING_HORIZONTAL = 10;
+const MARGIN_RIGHT = moderateScale(25);
+const PADDING_HORIZONTAL = moderateScale(10);
 
 const TabView: React.FC<Props> = (props) => {
   const fontSize = props.fontSize || Typography.FONT_SIZE_16;

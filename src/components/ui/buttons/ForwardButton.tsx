@@ -1,5 +1,5 @@
 import ArrowIcon from '@components/icons/ArrowIcon';
-import { Colors } from '@styles/index';
+import { Colors, Globals } from '@styles/index';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
@@ -23,6 +23,8 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    maxHeight: Globals.MAX_COLOR_SIZE,
+    maxWidth: Globals.MAX_COLOR_SIZE,
   },
 });
 

@@ -1,3 +1,4 @@
+import * as Constants from '@constants/index';
 import { Globals } from '@styles/index';
 import React from 'react';
 import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
@@ -7,6 +8,7 @@ interface Props {
   colorStyles?: StyleProp<ViewStyle>;
   fill?: boolean;
   scaleVertical?: boolean;
+  round?: boolean;
 }
 
 const Color: React.FC<Props> = (props) => {
@@ -23,6 +25,14 @@ const Color: React.FC<Props> = (props) => {
             ? Globals.COLOR_SIZE_VERTICAL
             : Globals.COLOR_SIZE,
         },
+        {
+          borderRadius:
+            !props.fill && props.round
+              ? Constants.DEVICE_HEIGHT > Globals.HEIGHT_BREAKPOINT
+                ? Globals.MAX_COLOR_SIZE / 2
+                : Globals.COLOR_SIZE / 2
+              : 0,
+        },
       ]}
     />
   );
@@ -32,6 +42,8 @@ const styles = StyleSheet.create({
   color: {
     aspectRatio: 1,
     height: Globals.COLOR_SIZE,
+    maxHeight: Globals.MAX_COLOR_SIZE,
+    maxWidth: Globals.MAX_COLOR_SIZE,
   },
 });
 

@@ -1,7 +1,7 @@
 import * as Constants from '@constants/index';
 import ExpoConstants from 'expo-constants';
 import { Platform } from 'react-native';
-import { moderateScale, moderateVerticalScale, verticalScale } from 'react-native-size-matters';
+import { moderateVerticalScale, verticalScale } from 'react-native-size-matters';
 
 import { boxShadow as shadowMixin, backdropHeight } from './mixins';
 
@@ -29,15 +29,27 @@ export const BOX_SHADOW = shadowMixin('black', { height: 15, width: 4 }, 20, 0.1
 
 // Main
 export const CONTENT_WIDTH = Constants.DEVICE_WIDTH * 0.9;
-export const MAX_CONTENT_WIDTH = 500;
+export const MAX_CONTENT_WIDTH = 650;
+export const MAX_CONTENT_WIDTH_THIN = 550;
 
 // Color Squares
-export const COLOR_SIZE = moderateScale(50);
-export const COLOR_SIZE_VERTICAL = moderateVerticalScale(55);
+export const COLOR_SIZE = CONTENT_WIDTH / 6;
+export const COLOR_SIZE_VERTICAL = CONTENT_WIDTH / 8;
+export const MAX_COLOR_SIZE = MAX_CONTENT_WIDTH / 8;
 
-export const BODY_ICON = 34;
+export const BODY_ICON = moderateVerticalScale(34, 0.2);
 
 export const BACKDROP_TRANSLATE_SMALL = HEADER_TRANSLATE_Y + verticalScale(30);
+
+export const HEIGHT_BREAKPOINT = 1000;
+
+export const BUTTON_TOP =
+  Constants.DEVICE_HEIGHT > HEIGHT_BREAKPOINT
+    ? backdropHeight() - BACKDROP_TRANSLATE_SMALL - HEADER_HEIGHT_WITH_STATUS_BAR
+    : backdropHeight() -
+      BACKDROP_TRANSLATE_SMALL -
+      HEADER_HEIGHT_WITH_STATUS_BAR +
+      (Platform.OS === 'ios' ? moderateVerticalScale(20) : moderateVerticalScale(8));
 
 export const LIKE_BUTTON_STYLES: {
   alignItems: 'flex-end' | 'flex-start' | 'center';
@@ -49,11 +61,7 @@ export const LIKE_BUTTON_STYLES: {
   alignItems: 'flex-end',
   zIndex: 99,
   position: 'absolute',
-  top:
-    backdropHeight() -
-    BACKDROP_TRANSLATE_SMALL -
-    HEADER_HEIGHT_WITH_STATUS_BAR +
-    (Platform.OS === 'ios' ? moderateVerticalScale(20) : 0),
+  top: BUTTON_TOP,
   right: 10,
 };
 

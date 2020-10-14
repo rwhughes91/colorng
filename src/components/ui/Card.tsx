@@ -21,11 +21,15 @@ const Card: React.FC<Props> = (props) => {
   return (
     <View style={[styles.card, props.styles]}>
       {!!props.header && (
-        <View style={styles.textContainer}>
+        <View style={[styles.textContainer]}>
           <Text color={Colors.PINK} styles={styles.textStyles} size={Typography.FONT_SIZE_18}>
             {props.header}
           </Text>
-          {!!props.description && <Text color={Colors.GRAY}>{props.description}</Text>}
+          {!!props.description && (
+            <Text color={Colors.GRAY} styles={{ marginBottom: 10 }}>
+              {props.description}
+            </Text>
+          )}
         </View>
       )}
       <View style={[styles.bodyContainer, props.bodyStyles]}>{props.body}</View>
@@ -50,7 +54,7 @@ const styles = StyleSheet.create({
   card: {
     flex: 1,
     width: Globals.CONTENT_WIDTH,
-    maxWidth: Globals.MAX_CONTENT_WIDTH,
+    maxWidth: Globals.MAX_CONTENT_WIDTH_THIN,
     backgroundColor: 'white',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -61,7 +65,7 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingTop: Spacing.SCALE_12,
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 0,
   },
   textStyles: {
     paddingBottom: 5,

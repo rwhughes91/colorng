@@ -58,19 +58,23 @@ const SearchInput: React.FC<Props> = (props) => {
             <Feather name="search" size={24} color={props.iconColor || Colors.BLUE} />
           </View>
         )}
-        <TextInput
-          style={[{ ...styles.searchInput, color: props.color || Colors.BLUE }, props.inputStyles]}
-          placeholder={props.placeholder || 'Search a color'}
-          onSubmitEditing={onSubmitEditingHandler}
-          ref={textInputRef}
-          placeholderTextColor={props.placeholderColor}
-          autoFocus={
-            props.autoFocus !== undefined ? props.autoFocus : !!customOnSubmitEditingHandler
-          }
-          pointerEvents={!customOnSubmitEditingHandler ? 'none' : 'auto'}
-          onChange={props.onChangeHandler}
-          value={props.value}
-        />
+        <View style={{ flex: 1 }} pointerEvents={!customOnSubmitEditingHandler ? 'none' : 'auto'}>
+          <TextInput
+            style={[
+              { ...styles.searchInput, color: props.color || Colors.BLUE },
+              props.inputStyles,
+            ]}
+            placeholder={props.placeholder || 'Search a color'}
+            onSubmitEditing={onSubmitEditingHandler}
+            ref={textInputRef}
+            placeholderTextColor={props.placeholderColor}
+            autoFocus={
+              props.autoFocus !== undefined ? props.autoFocus : !!customOnSubmitEditingHandler
+            }
+            onChange={props.onChangeHandler}
+            value={props.value}
+          />
+        </View>
       </LinearGradient>
     </TouchableOpacity>
   );

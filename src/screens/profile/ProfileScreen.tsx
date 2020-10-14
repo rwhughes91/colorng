@@ -4,6 +4,7 @@ import UserIcon from '@components/icons/UserIcon';
 import Layout from '@components/layouts/Layout';
 import LineItem from '@components/ui/LineItem';
 import HeaderText from '@components/ui/text/HeaderText';
+import * as Constants from '@constants/index';
 import Firebase from '@services/firebase/client';
 import { Globals, Colors, Typography, Spacing } from '@styles/index';
 import React, { useCallback } from 'react';
@@ -22,7 +23,12 @@ const ProfileScreen: React.FC = () => {
     <Layout>
       <View style={styles.container}>
         <View style={styles.header}>
-          <HeaderText color={Colors.PINK}>Hey, Robert</HeaderText>
+          <HeaderText
+            color={Colors.PINK}
+            styles={{ marginTop: Constants.DEVICE_HEIGHT > Globals.HEIGHT_BREAKPOINT ? 25 : 0 }}
+          >
+            Hey, Robert
+          </HeaderText>
         </View>
         <View style={styles.section}>
           <HeaderText

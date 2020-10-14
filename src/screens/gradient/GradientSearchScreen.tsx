@@ -16,35 +16,46 @@ type Props = NavigationScreenProps<'Search'>;
 
 const GradientSearch: React.FC<Props> = () => {
   const [tags, setTags] = useState<string[]>([]);
-  const firstTag = useRef('');
   const [gradients, setGradients] = useState<Gradients>([]);
   const [loading, setLoading] = useState(false);
+  const firstTag = useRef('');
+  const startAtRef = useRef(0);
 
-  // TODO: handle on refresh functionality (when gradients lists becomes long enough)
+  const LIMIT = 100;
+
+  const pullGradientsHandler = useCallback((eq: string, startAt = 0) => {
+    return Firebase.paginateDataArray<Gradients>(
+      'gradients',
+      [
+        {
+          field: 'colorSearch',
+          operator: 'array-contains',
+          eq,
+        },
+      ],
+      'likes',
+      LIMIT,
+      startAt
+    );
+  }, []);
 
   useEffect(() => {
     if (tags.length === 1 && tags[0] !== firstTag.current) {
       setLoading(true);
-      Firebase.paginateDataArray<Gradients>('gradients', [
-        {
-          field: 'colorSearch',
-          operator: 'array-contains',
-          eq: tags[0],
-        },
-      ])
+      pullGradientsHandler(tags[0])
         .then((res) => {
+          startAtRef.current = startAtRef.current + res.length;
           firstTag.current = tags[0];
           setLoading(false);
           setGradients(res as any);
         })
-        .catch((error) => {
+        .catch(() => {
           setLoading(false);
-          console.log(error.message);
         });
     } else if (tags.length === 0) {
       setGradients([]);
     }
-  }, [tags]);
+  }, [tags, pullGradientsHandler]);
 
   const appendTagHandler = useCallback((text: string) => {
     setTags((prevState) => {
@@ -137,7 +148,7 @@ const styles = StyleSheet.create({
   buttonWrapper: {
     top: -Globals.HEADER_MARGINS,
     width: Globals.CONTENT_WIDTH,
-    maxWidth: Globals.MAX_CONTENT_WIDTH,
+    maxWidth: Globals.MAX_CONTENT_WIDTH_THIN,
   },
   main: {
     flex: 1,

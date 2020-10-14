@@ -70,7 +70,7 @@ export function roundCornersRadius(type: 'first' | 'last', borderRadius: number)
 }
 
 export function backdropHeight(height = Constants.DEVICE_HEIGHT) {
-  const adjustment = 500;
+  const adjustment = 100;
   const baseHeight = 1000;
   const ratio = height / 1000;
   if (ratio < 1) {

@@ -1,6 +1,7 @@
 import BackIcon from '@components/icons/BackIcon';
 import EditIcon from '@components/icons/EditIcon';
 import ColorPickerButton from '@components/ui/buttons/ColorPickerButton';
+import SaveButton from '@components/ui/buttons/SaveButton';
 import { RouteProp } from '@react-navigation/native';
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 import CreateEditScreen from '@screens/create/CreateEditScreen';
@@ -67,7 +68,13 @@ const CreateNavigator = () => {
         component={CreateEditScreen}
         options={{ headerTintColor: Colors.PINK }}
       />
-      <Stack.Screen name="New" component={CreateNewScreen} options={{ headerTintColor: 'white' }} />
+      <Stack.Screen
+        name="New"
+        component={CreateNewScreen}
+        options={{
+          headerTintColor: 'white',
+        }}
+      />
     </Stack.Navigator>
   );
 };

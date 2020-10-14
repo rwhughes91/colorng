@@ -2,9 +2,12 @@ import ColorListLayout from '@components/layouts/ColorListLayout';
 import CreateGradientHeader from '@components/layouts/Header/CreateGradientHeader';
 import Main from '@components/layouts/Main';
 import Button from '@components/ui/buttons/Button';
+import SaveButton from '@components/ui/buttons/SaveButton';
+import * as Constants from '@constants/index';
 import useForm from '@hooks/useForm';
+import { Globals } from '@styles/index';
 import { Colors } from '@typeDefs/index';
-import React, { useCallback } from 'react';
+import React, { useCallback, useLayoutEffect } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 
@@ -13,6 +16,9 @@ interface Props {
   loading?: boolean;
   onSubmit: (name: string, description: string) => void;
   icons?: boolean;
+  saveHeader?: boolean;
+  navigation: any;
+  onSaveColorHandler: (x: string, y: string, z: string) => void;
 }
 
 const CreateFromImageScreen: React.FC<Props> = (props) => {
@@ -45,21 +51,33 @@ const CreateFromImageScreen: React.FC<Props> = (props) => {
     }
   }, [formState.name.value, formState.description.value, onSubmit]);
 
+  useLayoutEffect(() => {
+    if (props.saveHeader) {
+      props.navigation.setOptions({
+        headerRight: () => <SaveButton size={Globals.COLOR_SIZE} onPress={onSubmitHandler} />,
+      });
+    }
+  }, [props.navigation, props.saveHeader, onSubmitHandler]);
+
   return (
     <>
       <View style={styles.container}>
         <CreateGradientHeader onSubmit={onChangeHandler} />
         <Main small styles={{ paddingBottom: 10 }}>
-          <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+          <View style={{ flex: 1 }}>
             <ColorListLayout
               colors={props.gradientColors}
               title="Colors"
               icon={props.icons !== undefined ? props.icons : true}
+              flatList={Constants.DEVICE_HEIGHT < 750}
+              onSaveColorHandler={props.onSaveColorHandler}
             />
             <View style={styles.buttonContainer}>
-              <Button onPress={onSubmitHandler} loading={props.loading}>
-                Save
-              </Button>
+              {!props.saveHeader && (
+                <Button onPress={onSubmitHandler} loading={props.loading}>
+                  Save
+                </Button>
+              )}
             </View>
           </View>
         </Main>

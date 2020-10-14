@@ -16,7 +16,7 @@ const CheckMarkButton: React.FC<Props> = (props) => {
     <TouchableOpacity
       activeOpacity={Globals.ACTIVE_OPACITY}
       onPress={props.onPress}
-      style={{ paddingHorizontal: 5, paddingVertical: 5 }}
+      style={{ paddingHorizontal: 5, paddingVertical: 5, justifyContent: 'center' }}
     >
       <View style={[styles.button, { height: props.size, borderRadius: props.size / 2 }]}>
         {props.selected && (
@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: Colors.LIGHT_GRAY,
+    maxHeight: 65,
   },
 });
 

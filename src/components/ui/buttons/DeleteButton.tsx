@@ -29,8 +29,7 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: Colors.LIGHT_GRAY,
-    borderWidth: 1,
+    maxHeight: 65,
   },
 });
 

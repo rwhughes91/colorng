@@ -72,7 +72,6 @@ const Form: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
   form: {
-    flex: 1,
     width: '100%',
   },
   formControl: { marginBottom: MARGIN },

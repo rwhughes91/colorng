@@ -1,4 +1,5 @@
 import Text from '@components/ui/text/Text';
+import * as Constants from '@constants/index';
 import { Globals, Colors } from '@styles/index';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
@@ -32,8 +33,9 @@ const styles = StyleSheet.create({
   picker: {
     flex: 1,
     width: Globals.CONTENT_WIDTH,
-    maxWidth: Globals.MAX_CONTENT_WIDTH,
+    maxWidth: Globals.MAX_CONTENT_WIDTH_THIN,
     alignSelf: 'center',
+    maxHeight: Globals.MAX_CONTENT_WIDTH_THIN,
   },
 });
 
