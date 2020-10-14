@@ -1,0 +1,19 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "gradients",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "colorSearch",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "likes",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
