@@ -11,7 +11,7 @@ import Color from '@models/Color';
 import { NavigationScreenProps } from '@navigations/CreateNavigator';
 import { Colors, Globals } from '@styles/index';
 import { Colors as ColorsType, Color as ColorType } from '@typeDefs/index';
-import React, { useCallback, useState, useLayoutEffect } from 'react';
+import React, { useCallback, useState, useLayoutEffect, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
@@ -68,6 +68,13 @@ const CreateFromInputScreen: React.FC<Props> = (props) => {
     });
   }, []);
 
+  const onSelectHandler = useCallback(
+    (color: ColorType) => {
+      onIconPressHandler(color);
+    },
+    [onIconPressHandler]
+  );
+
   const toggleShowModalHandler = useCallback(() => {
     setShowModal((prevState) => !prevState);
   }, []);
@@ -93,6 +100,16 @@ const CreateFromInputScreen: React.FC<Props> = (props) => {
   const saveGradientHandler = useCallback(() => {
     props.navigation.navigate('New', { colors: selectedColors });
   }, [props.navigation, selectedColors]);
+
+  useEffect(() => {
+    if (userColors.length <= 0) {
+      setShowModal(true);
+    } else {
+      if (showModal) {
+        setShowModal(false);
+      }
+    }
+  }, [userColors, showModal]);
 
   useLayoutEffect(() => {
     props.navigation.setOptions({
@@ -190,12 +207,12 @@ const CreateFromInputScreen: React.FC<Props> = (props) => {
               items={colors}
               flatList
               checkmarkIcon
-              iconPress={onIconPressHandler}
               emptyText={{
                 title: 'No colors',
                 body: 'Try clearing your filter and searching more generally',
               }}
               onSaveColorHandler={() => {}}
+              onSelectItemHandler={onSelectHandler}
             />
           </View>
         ) : (

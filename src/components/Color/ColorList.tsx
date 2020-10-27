@@ -1,6 +1,6 @@
 import Loader from '@components/ui/Loader';
 import { Colors } from '@styles/index';
-import { Colors as ColorsType } from '@typeDefs/index';
+import { Colors as ColorsType, Color } from '@typeDefs/index';
 import React, { useCallback, useMemo } from 'react';
 import { View, StyleProp, ViewStyle, StyleSheet, TextStyle, FlatList } from 'react-native';
 
@@ -25,7 +25,8 @@ interface Props {
   iconPress?: (x: any) => void;
   emptyText?: { title: string; body: string };
   loading?: boolean;
-  onSaveColorHandler: (x: string, y: string, z: string) => void;
+  onSaveColorHandler: (name: string, hex: string, id: string) => void;
+  onSelectItemHandler?: (color: Color) => void;
 }
 
 const ColorList: React.FC<Props> = (props) => {
@@ -66,6 +67,7 @@ const ColorList: React.FC<Props> = (props) => {
           iconPress={props.iconPress}
           fill={props.fill}
           onSaveColorHandler={props.onSaveColorHandler}
+          onSelectItemHandler={props.onSelectItemHandler}
         />
       );
     },
@@ -83,6 +85,7 @@ const ColorList: React.FC<Props> = (props) => {
       props.textStyles,
       props.textStylesView,
       props.onSaveColorHandler,
+      props.onSelectItemHandler,
     ]
   );
 

@@ -1,5 +1,4 @@
 import Text from '@components/ui/text/Text';
-import * as Constants from '@constants/index';
 import { Globals, Colors } from '@styles/index';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';

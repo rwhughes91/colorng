@@ -5,6 +5,7 @@ import * as constants from '@constants/index';
 import useFirebase from '@hooks/useFirebase';
 import * as actions from '@store/actions/index';
 import { Colors, Globals } from '@styles/index';
+import { Color as ColorType } from '@typeDefs/index';
 import { capitalize } from '@utils/helpers';
 import React, { useCallback } from 'react';
 import { View, StyleSheet, StyleProp, ViewStyle, TextStyle, TouchableOpacity } from 'react-native';
@@ -26,7 +27,8 @@ interface Props {
   focused?: boolean;
   checkmarkIcon?: boolean;
   iconPress?: (x: any) => void;
-  onSaveColorHandler: (x: string, y: string, z: string) => void;
+  onSaveColorHandler: (name: string, hex: string, id: string) => void;
+  onSelectItemHandler?: (color: ColorType) => void;
 }
 
 const ColorItem: React.FC<Props> = (props) => {
@@ -42,8 +44,19 @@ const ColorItem: React.FC<Props> = (props) => {
     dispatch(actions.removeGradientOrColor('userColors', props.hex, firebase?.user?.uid));
   }, [dispatch, props.hex, firebase?.user?.uid]);
 
+  const onSelectItemHandlerCb = props.onSelectItemHandler;
+  const onSelectItemHandler = useCallback(() => {
+    if (onSelectItemHandlerCb) {
+      onSelectItemHandlerCb({ name: props.name, hex: props.hex, id: props.hex });
+    }
+  }, [props.name, props.hex, onSelectItemHandlerCb]);
+
   return (
-    <View style={[styles.container, props.styles, props.fill ? { flex: 1 } : null]}>
+    <TouchableOpacity
+      style={[styles.container, props.styles, props.fill ? { flex: 1 } : null]}
+      activeOpacity={props.onSelectItemHandler ? Globals.ACTIVE_OPACITY : 1}
+      onPress={onSelectItemHandler}
+    >
       <Color
         color={props.hex}
         colorStyles={[props.colorStyles, { opacity: 1 }]}
@@ -82,7 +95,7 @@ const ColorItem: React.FC<Props> = (props) => {
           )}
         </View>
       )}
-    </View>
+    </TouchableOpacity>
   );
 };
 
