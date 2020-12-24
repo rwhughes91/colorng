@@ -104,12 +104,8 @@ const CreateFromInputScreen: React.FC<Props> = (props) => {
   useEffect(() => {
     if (userColors.length <= 0) {
       setShowModal(true);
-    } else {
-      if (showModal) {
-        setShowModal(false);
-      }
     }
-  }, [userColors, showModal]);
+  }, [userColors]);
 
   useLayoutEffect(() => {
     props.navigation.setOptions({
@@ -120,19 +116,28 @@ const CreateFromInputScreen: React.FC<Props> = (props) => {
             alignItems: 'center',
           }}
         >
-          <ColorPickerButton
-            size={Globals.COLOR_SIZE}
-            iconSize={24}
-            onPress={toggleShowModalHandler}
-            focused={!!showModal}
-          />
+          {userColors.length > 0 && (
+            <ColorPickerButton
+              size={Globals.COLOR_SIZE}
+              iconSize={24}
+              onPress={toggleShowModalHandler}
+              focused={!!showModal}
+            />
+          )}
           {selectedColors.length === 5 && (
             <AddButton size={Globals.COLOR_SIZE} iconSize={26} onPress={saveGradientHandler} />
           )}
         </View>
       ),
     });
-  }, [showModal, props.navigation, toggleShowModalHandler, selectedColors, saveGradientHandler]);
+  }, [
+    showModal,
+    props.navigation,
+    toggleShowModalHandler,
+    selectedColors,
+    saveGradientHandler,
+    userColors,
+  ]);
 
   let items = (
     <EmptyGradientList
