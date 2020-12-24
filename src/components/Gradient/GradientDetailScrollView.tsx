@@ -54,7 +54,7 @@ const GradientDetailScrollView: React.FC<Props> = (props) => {
       </Main>
     </View>
   );
-  return props.gradients.length > 0 ? (
+  return (
     <GradientList
       gradients={props.gradients}
       listHeaderComponent={header}
@@ -66,26 +66,6 @@ const GradientDetailScrollView: React.FC<Props> = (props) => {
       onScroll={props.onScroll}
       onItemPress={onReplaceHandler}
     />
-  ) : (
-    <View style={{ flex: 1 }}>
-      <AnimatedHeader
-        title={{ text: props.title, location: 'above' }}
-        description={props.description}
-        animatedValue={props.animatedValue}
-      />
-      <Main small styles={{ flex: 1 }}>
-        <ColorListLayout
-          colors={props.colors}
-          title="Colors"
-          styles={{ marginTop: 0 }}
-          mainContainer={{ flex: 1 }}
-          icon
-          flatList
-          loading={props.loading}
-          onSaveColorHandler={props.onSaveColorHandler}
-        />
-      </Main>
-    </View>
   );
 };
 

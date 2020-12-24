@@ -4,7 +4,7 @@ import { Gradients, Gradient } from '@typeDefs/index';
 import React, { useCallback, useMemo } from 'react';
 import { FlatList, ListRenderItem, StyleProp, ViewStyle, Animated, View } from 'react-native';
 
-import EmptyGradientList from './EmptyGradientList';
+// import EmptyGradientList from './EmptyGradientList';
 import GradientListItem from './GradientListItem';
 
 interface Props {
@@ -74,16 +74,6 @@ const GradientList: React.FC<Props> = (props) => {
     refreshing: props.refreshing,
     initialNumToRender: 10,
   };
-
-  if (props.gradients.length === 0 && !props.loading) {
-    return (
-      <EmptyGradientList
-        styles={props.emptyGradientStyles}
-        title={props.emptyGradientText?.title}
-        body={props.emptyGradientText?.body}
-      />
-    );
-  }
 
   return !props.animated ? <FlatList {...config} /> : <Animated.FlatList {...config} />;
 };

@@ -1,4 +1,5 @@
 import ColorList from '@components/Color/ColorList';
+import EmptyGradientList from '@components/Gradient/EmptyGradientList';
 import GradientList from '@components/Gradient/GradientList';
 import LoginIcon from '@components/icons/LoginIcon';
 import Header from '@components/layouts/Header/Header';
@@ -63,13 +64,16 @@ const SavedScreen: React.FC<Props> = (props) => {
   const tabs = [
     {
       name: 'Gradients',
-      component: (
-        <GradientList
-          gradients={savedGradients}
-          listHeaderComponent={header}
-          emptyGradientStyles={emptyStyles}
-        />
-      ),
+      component:
+        savedGradients.length > 0 ? (
+          <GradientList
+            gradients={savedGradients}
+            listHeaderComponent={header}
+            emptyGradientStyles={emptyStyles}
+          />
+        ) : (
+          <EmptyGradientList styles={emptyStyles} />
+        ),
     },
     {
       name: 'Colors',
@@ -82,6 +86,7 @@ const SavedScreen: React.FC<Props> = (props) => {
           flatList
           listHeaderComponent={header}
           emptyStyles={emptyStyles}
+          onSaveColorHandler={() => {}}
         />
       ),
     },
